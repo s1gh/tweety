@@ -1,0 +1,7 @@
+discord_nickname = 'Tweety'
+discord_client_id = ''
+discord_token = ''
+discord_client_secret = ''
+
+omdb_api_url = 'http://www.omdbapi.com/?t={}&plot=short&y={}&apikey={}'
+omdb_api_key = ''
