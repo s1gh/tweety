@@ -26,7 +26,7 @@ class Tweety(commands.Bot):
     async def on_ready(self):
         if not hasattr(self, 'uptime'):
             self.uptime = datetime.datetime.utcnow()
-        if not hasattr(self, 'root'):
+        if not hasattr(self, 'base'):
             self.base = os.path.dirname(os.path.abspath(__file__))
 
         print('Logged in as: {}\nID: {}\n--------'.format(self.user, self.user.id))
