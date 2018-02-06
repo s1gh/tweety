@@ -18,7 +18,7 @@ class Info:
         if ctx.invoked_subcommand is None:
             em = Embed()
             em.set_thumbnail(url=BOT_INFO_THUMBNAIL)
-            em.set_author(name='Tweety', url='https://github.com/s1gh/Tweety_2.0')
+            em.set_author(name='Tweety', url='https://github.com/s1gh/tweety/')
             em.add_field(name="Library", value='Discord.py ({})'.format(discord.__version__))
             em.add_field(name="Database", value='MongoDB ({})'.format(pymongo_version))
             em.add_field(name="Lines of Code", value=LinesOfCode().loc(root=self.bot.base))
