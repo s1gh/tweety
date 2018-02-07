@@ -10,7 +10,6 @@ class Update:
     @commands.command()
     async def update_test(self, ctx):
         await ctx.send('```python\n[*] TESTING SELF UPDATE```')
-        os.execv(self.bot.base + 'launcher.py', sys.argv)
 
 
 
