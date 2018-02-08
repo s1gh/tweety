@@ -7,3 +7,4 @@ omdb_api_url = 'http://www.omdbapi.com/?t={}&plot=short&y={}&apikey={}'
 omdb_api_key = ''
 
 github_access_token = ''
+git_repo_name = 'tweety'
