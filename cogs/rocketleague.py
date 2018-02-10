@@ -5,6 +5,8 @@ from discord.ext import commands
 from config import rocketleague_api_key as api_key
 from utils.misc import Embed
 from datetime import datetime
+
+
 api_url = 'https://api.rocketleaguestats.com/v1'
 top_rank_thumb = "https://rocketleague.tracker.network/Images/RL/ranked/s4-{}.png"
 embed_icon = 'http://i.imgur.com/rJDXsLj.png'
