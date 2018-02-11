@@ -5,7 +5,6 @@ import os
 import logging
 import sys
 from collections import deque
-from datetime import datetime
 from discord.ext import commands
 from utils import checks
 
