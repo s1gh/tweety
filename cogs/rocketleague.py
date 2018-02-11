@@ -84,7 +84,7 @@ class Rocketleague:
                         ))
                     await ctx.send(embed=em)
                 else:
-                    log.error('Something went wrong when accessing the API (code: {}'.format(r.status))
+                    log.error('Something went wrong when accessing the API (code: {})'.format(r.status))
 
 
     def __get_highest_tier(self, tier_data):
