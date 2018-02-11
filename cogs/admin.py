@@ -45,8 +45,8 @@ class Admin:
     @commands.command(hidden=True)
     @checks.is_admin()
     async def restart(self, ctx):
-        log.info('Restarted Discord Bot ({}))'.format(ctx.message.author))
         try:
+            log.info('Restarted Discord Bot ({}))'.format(ctx.message.author))
             os.execv(sys.executable, ['python'] + sys.argv)
         except Exception as err:
             log.warning('Failed to restart Discord Bot ({})'.format(err))
