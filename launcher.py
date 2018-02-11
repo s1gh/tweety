@@ -16,7 +16,7 @@ def setup_logging():
         log = logging.getLogger()
         log.setLevel(logging.INFO)
         handler = logging.FileHandler(
-            filename='tweety-{}.log'.format(datetime.datetime.now().strftime('%d-%m-%Y')), encoding='utf-8', mode='w')
+            filename='tweety-{}.log'.format(datetime.datetime.now().strftime('%d-%m-%Y')), encoding='utf-8', mode='a')
         handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
         log.addHandler(handler)
 
