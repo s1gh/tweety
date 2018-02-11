@@ -4,6 +4,8 @@ import discord
 import os
 import logging
 import sys
+from collections import deque
+from datetime import datetime
 from discord.ext import commands
 from utils import checks
 
@@ -13,6 +15,16 @@ log = logging.getLogger(__name__)
 class Admin:
     def __init__(self, tweety):
         self.bot = tweety
+
+    @commands.command()
+    @checks.is_admin()
+    async def log(self, ctx, lines: int=5):
+        with open('{}/tweety.log'.format(self.bot.base), 'r') as f:
+            content = deque(f, lines)
+            if len(content) > 0:
+                await ctx.send('```python\n{}```'.format(''.join(content)))
+            else:
+                await ctx.send('```[INFO] Log file is currently empty.```')
 
     @commands.command()
     async def source(self, ctx, command: str=None):
