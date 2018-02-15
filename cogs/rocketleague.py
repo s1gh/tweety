@@ -1,6 +1,7 @@
 import logging
 import json
 import collections
+from math import ceil
 from discord.ext import commands
 from config import rocketleague_api_key as api_key
 from utils.misc import Embed
@@ -57,7 +58,9 @@ class Rocketleague:
         self.bot = tweety
 
     @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def rl(self, ctx, uid : str):
+        print('test123')
         async with ctx.channel.typing():
             async with self.bot.session.get(api_url + '/player?unique_id={}&platform_id=1&apikey={}'.format(uid, api_key)) as r:
                 if r.status != 200:
@@ -79,12 +82,19 @@ class Rocketleague:
                         em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
                             [key for key, value in tiers.items() if value == str(v['tier'])][0],
                             v['rankPoints'],
-                            v['division'],
+                            int(v['division']) + 1,
                             v['matchesPlayed']
                         ))
                     await ctx.send(embed=em)
                 else:
                     log.error('Something went wrong when accessing the API (code: {})'.format(r.status))
+
+    @rl.error
+    async def rl_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            log.warning('User "{}" is being rate limited.'.format(ctx.message.author))
+            await ctx.send('```[INFO] This command is on cooldown, please retry in {} seconds.```'.format(ceil(error.retry_after)))
+
 
 
     def __get_highest_tier(self, tier_data):
