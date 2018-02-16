@@ -60,7 +60,6 @@ class Rocketleague:
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def rl(self, ctx, uid : str):
-        print('test123')
         async with ctx.channel.typing():
             async with self.bot.session.get(api_url + '/player?unique_id={}&platform_id=1&apikey={}'.format(uid, api_key)) as r:
                 if r.status != 200:
