@@ -6,7 +6,10 @@ import os
 from discord.ext import commands
 
 plugins = [
-    'cogs.admin'
+    'cogs.admin',
+    'cogs.rocketleague',
+    'cogs.info',
+    'cogs.troll'
 ]
 
 class Tweety(commands.Bot):
