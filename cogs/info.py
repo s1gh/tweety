@@ -68,14 +68,28 @@ class Info:
         else:
             await ctx.send(final_url)
 
-
     @info.command()
+    async def server(self, ctx):
+        """Fetch information about the server"""
+
+        em = Embed()
+        em.set_author(name=ctx.guild.name)
+        em.set_thumbnail(url=ctx.guild.icon_url)
+        em.add_field(name='Created', value=ctx.guild.created_at.strftime('%d/%m/%Y %H:%M:%S'))
+        em.add_field(name='Region', value=ctx.guild.region.name.upper())
+        em.add_field(name='Members', value=ctx.guild.member_count)
+        em.add_field(name='Owner', value=ctx.guild.owner)
+        em.add_field(name='Roles', value=', '.join(role.name for role in ctx.guild.roles), inline=False)
+
+        await ctx.send(embed=em)
+
+    @info.command(aliases=['about'])
     async def profile(self, ctx, *, user : discord.Member):
         """Fetch information about a user"""
 
         em = Embed()
-        em.set_author(name='Profile Information', icon_url=embed_profile_icon)
         em.set_thumbnail(url=user.avatar_url)
+        em.set_author(name='Profile Information', icon_url=embed_profile_icon)
         em.add_field(name='Display Name', value=user.display_name)
         em.add_field(name='Discriminator', value=user.discriminator)
         em.add_field(name='Created', value=user.created_at.strftime('%d/%m/%Y %H:%M:%S'))
@@ -86,6 +100,10 @@ class Info:
 
         await ctx.send(embed=em)
 
+    @profile.error
+    async def profile_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('```[ERROR] {}.```'.format(error))
 
 def setup(bot):
     bot.add_cog(Info(bot))
