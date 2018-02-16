@@ -6,9 +6,12 @@ from pymongo import version as pymongo_version
 from discord.ext import commands
 from utils.misc import Embed, LinesOfCode, Uptime, Birthday
 
-BOT_INFO_THUMBNAIL = 'https://s22.postimg.org/bgtc198pt/tweety_angry.png'
-PYTHON_ICON = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/' \
+bot_info_thumb = 'https://s22.postimg.org/bgtc198pt/tweety_angry.png'
+python_icon = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/' \
               'Python-logo-notext.svg/2000px-Python-logo-notext.svg.png'
+embed_profile_icon = 'https://www.iconsdb.com/icons/preview/black/manager-xxl.png'
+embed_gaming_icon = 'https://cdn.iconscout.com/public/images/icon/free/png-512/' \
+                    'videogame-mushroom-toad-mario-bros-3cf1084383a9c2e6-512x512.png'
 
 class Info:
     def __init__(self, tweety):
@@ -18,7 +21,7 @@ class Info:
     async def info(self, ctx):
         if ctx.invoked_subcommand is None:
             em = Embed()
-            em.set_thumbnail(url=BOT_INFO_THUMBNAIL)
+            em.set_thumbnail(url=bot_info_thumb)
             em.set_author(name='Tweety', url='https://github.com/s1gh/tweety/')
             em.add_field(name="Library", value='Discord.py ({})'.format(discord.__version__))
             em.add_field(name="Database", value='MongoDB ({})'.format(pymongo_version))
@@ -26,17 +29,20 @@ class Info:
             em.add_field(name="Loaded Plugins", value=str(len(self.bot.extensions)))
             em.add_field(name="Developer", value="s1gh#9750")
             em.add_field(name="Birthday", value=Birthday(self.bot.user.created_at).get_birthday())
-            em.set_footer(text='Created with Python {} | Uptime: {}'.format(sys.version[:6], Uptime(self.bot.uptime).uptime()), icon_url=PYTHON_ICON)
+            em.set_footer(text='Created with Python {} | Uptime: {}'.format(sys.version[:6], Uptime(self.bot.uptime).uptime()), icon_url=python_icon)
 
             await ctx.send(embed=em)
 
     @info.command()
     async def uptime(self, ctx):
+        """Get the current uptime"""
+
         await ctx.send('```python\n{}```'.format(Uptime(self.bot.uptime).uptime()))
 
     @info.command()
     async def source(self, ctx, command: str=None):
-        """Display the source code of a given command"""
+        """Display the source code for a specific command"""
+
         source_url = 'https://github.com/s1gh/tweety'
         if command is None:
             await ctx.send(source_url)
@@ -65,16 +71,18 @@ class Info:
 
     @info.command()
     async def profile(self, ctx, *, user : discord.Member):
+        """Fetch information about a user"""
+
         em = Embed()
-        em.set_author(name='Profile Information')
+        em.set_author(name='Profile Information', icon_url=embed_profile_icon)
         em.set_thumbnail(url=user.avatar_url)
         em.add_field(name='Display Name', value=user.display_name)
         em.add_field(name='Discriminator', value=user.discriminator)
         em.add_field(name='Created', value=user.created_at.strftime('%d/%m/%Y %H:%M:%S'))
         em.add_field(name='Joined', value=user.joined_at.strftime('%d/%m/%Y %H:%M:%S'))
-        em.add_field(name='Playing', value=user.game or 'Nothing')
         em.add_field(name='Account Type', value='User' if not user.bot else 'Bot')
-        em.add_field(name='Roles', value=', '.join(x.name for x in user.roles))
+        em.add_field(name='Roles', value=', '.join(x.name for x in user.roles), inline=False)
+        em.set_footer(text='Currently playing: {}'.format(user.game or 'Nothing'), icon_url=embed_gaming_icon)
 
         await ctx.send(embed=em)
 
