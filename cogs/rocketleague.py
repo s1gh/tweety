@@ -58,26 +58,30 @@ class Rocketleague:
         self.bot = tweety
 
     @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)  # 5 second cooldown per user
     async def rl(self, ctx, uid : str):
         async with ctx.channel.typing():
             async with self.bot.session.get(api_url + '/player?unique_id={}&platform_id=1&apikey={}'.format(uid, api_key)) as r:
                 if r.status != 200:
                     try:
                         log.error(api_status_codes[int(r.status)])
+
+                        if r.status == 404:
+                            await ctx.send('```[ERROR] {} "{}"```'.format('Could not find player', uid))
                     except Exception:
                         log.error('Something went wrong when accessing the API (code: {}'.format(r.status))
                 elif r.status == 200:
                     data = json.loads(await r.text())
+                    top_season = max(data['rankedSeasons'].keys())  # Most recent season played
 
                     em = Embed()
-                    em.set_thumbnail(url=top_rank_thumb.format(self.__get_highest_tier(data['rankedSeasons'].get('7'))))  # TODO Get current season programmatically
+                    em.set_thumbnail(url=top_rank_thumb.format(self.__get_highest_tier(data['rankedSeasons'][top_season])))
                     em.set_author(name='Rocket League Rankings For {}'.format(data['displayName']), icon_url=embed_icon)
                     em.set_footer(text='Last Update: {}'.format(
                         datetime.fromtimestamp(data['updatedAt']).strftime('%Y-%m-%d %H:%M:%S')
                     ))
 
-                    for k, v in data['rankedSeasons'].get('7').items():  # TODO Get current season programmatically
+                    for k, v in data['rankedSeasons'][top_season].items():
                         em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
                             [key for key, value in tiers.items() if value == str(v['tier'])][0],
                             v['rankPoints'],
@@ -94,8 +98,6 @@ class Rocketleague:
             log.warning('User "{}" is being rate limited.'.format(ctx.message.author))
             await ctx.send('```[INFO] This command is on cooldown, please retry in {} seconds.```'.format(ceil(error.retry_after)))
 
-
-
     def __get_highest_tier(self, tier_data):
         highest_rank = 0
         tier_data = collections.OrderedDict(sorted(tier_data.items()))
@@ -104,7 +106,6 @@ class Rocketleague:
             if rank['tier'] > highest_rank:
                 highest_rank = rank['tier']
         return highest_rank
-
 
 
 def setup(bot):
