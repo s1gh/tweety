@@ -2,6 +2,7 @@ import json
 import logging
 import asyncio
 import re
+from datetime import datetime
 from utils.misc import Embed
 
 crypto_api = 'https://min-api.cryptocompare.com/data/{}'
@@ -52,6 +53,9 @@ class Currency:
                         em.add_field(name='Change Last 24h', value='{:.4f}'.format(
                             data['RAW'][q[0][1].upper()][convert_to]['CHANGE24HOUR']
                         ))
+
+                        em.set_footer(text='Last Update: {}'.format(
+                            datetime.fromtimestamp(data['RAW'][q[0][1].upper()][convert_to]['LASTUPDATE']).strftime('%Y-%m-%d %H:%M:%S')))
 
                         await message.channel.send(embed=em)
 
