@@ -44,7 +44,7 @@ class Currency:
                             em.set_thumbnail(url='http://simpleicon.com/wp-content/uploads/coin-money-4.png')
 
                         em.add_field(name='Exchange Rate', value='{:.4f} {}'.format(
-                            data['RAW'][q[0][1].upper()][convert_to]['PRICE'],
+                            float(data['RAW'][q[0][1].upper()][convert_to]['PRICE']),
                             convert_to
                         ))
                         em.add_field(name='Algorithm', value=self.coin_data[q[0][1].upper()]['Algo'])
