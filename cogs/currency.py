@@ -42,14 +42,16 @@ class Currency:
                         except KeyError as err:
                             em.set_thumbnail(url='http://simpleicon.com/wp-content/uploads/coin-money-4.png')
 
-                        em.add_field(name='Exchange Rate', value='{} {}'.format(
+                        em.add_field(name='Exchange Rate', value='{:.4f} {}'.format(
                             data['RAW'][q[0][1].upper()][convert_to]['PRICE'],
                             convert_to
                         ))
                         em.add_field(name='Algorithm', value=self.coin_data[q[0][1].upper()]['Algo'])
                         em.add_field(name='Premined', value=self.coin_data[q[0][1].upper()]['Premined'] if not '0' else 'No')
                         em.add_field(name='Total Supply', value=self.coin_data[q[0][1].upper()]['Supply'])
-                        em.add_field(name='Change Last 24h', value=data['RAW'][q[0][1].upper()][convert_to]['CHANGE24HOUR'])
+                        em.add_field(name='Change Last 24h', value='{:.4f}'.format(
+                            data['RAW'][q[0][1].upper()][convert_to]['CHANGE24HOUR']
+                        ))
 
                         await message.channel.send(embed=em)
 
