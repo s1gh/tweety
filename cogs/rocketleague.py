@@ -67,7 +67,7 @@ class Rocketleague:
                         log.error(api_status_codes[int(r.status)])
 
                         if r.status == 404:
-                            await ctx.send('```[ERROR] {} "{}"```'.format('Could not find player', uid))
+                            await ctx.send('```[ERROR] Could not find player "{}"```'.format(uid))
                     except Exception:
                         log.error('Something went wrong when accessing the API (code: {}'.format(r.status))
                 elif r.status == 200:
