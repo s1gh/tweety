@@ -5,8 +5,8 @@ import discord
 import random
 
 class Embed(discord.Embed):
-    def __init__(self):
-        super().__init__(color=random.randint(0x000000, 0xffffff))  # Create an embed with a random color
+    def __init__(self, **kvargs):
+        super().__init__(**kvargs, color=random.randint(0x000000, 0xffffff))  # Create an embed with a random color
 
 class LinesOfCode:
     def walk(self, root='.', recurse=True, pattern='*'):
