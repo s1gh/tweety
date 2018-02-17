@@ -11,12 +11,11 @@ def setup_logging():
     try:
         # __enter__
         logging.getLogger('discord').setLevel(logging.INFO)
-        logging.getLogger('discord').setLevel(logging.WARNING)
 
         log = logging.getLogger()
         log.setLevel(logging.INFO)
         handler = logging.FileHandler(
-            filename='tweety-{}.log'.format(datetime.datetime.now().strftime('%d-%m-%Y')), encoding='utf-8', mode='a')
+            filename='tweety.log', encoding='utf-8', mode='a')
         handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
         log.addHandler(handler)
 
