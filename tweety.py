@@ -9,7 +9,8 @@ plugins = [
     'cogs.admin',
     'cogs.rocketleague',
     'cogs.info',
-    'cogs.troll'
+    'cogs.troll',
+    'cogs.currency'
 ]
 
 class Tweety(commands.Bot):
