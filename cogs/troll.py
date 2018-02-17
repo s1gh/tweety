@@ -8,14 +8,12 @@ api_url = 'http://pugme.herokuapp.com/bomb?count={}'
 log = logging.getLogger(__name__)
 
 
-# 26, 27 wont work
-
 class Troll:
     def __init__(self, tweety):
         self.bot = tweety
 
     @commands.command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)  # Can only be used 1 time pr. minute (server limit)
+    @commands.cooldown(1, 180, commands.BucketType.guild)  # Can only be used 1 time per 180 seconds (server limit)
     async def pugbomb(self, ctx, count: int = 3):
         if count > 20:
             raise commands.CheckFailure
