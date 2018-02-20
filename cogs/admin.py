@@ -21,7 +21,7 @@ class Admin:
         try:
             await member.edit(nick=nickname)
         except discord.Forbidden:
-            log.critical('You do not have the proper permissions to change nicknames ({}).'.format(ctx.command))
+            log.critical('Bot does not have the proper permissions to change nicknames')
 
     @commands.command(hidden=True)
     @checks.is_admin()
