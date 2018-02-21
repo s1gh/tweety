@@ -71,24 +71,27 @@ class Rocketleague:
                     except Exception:
                         log.error('Something went wrong when accessing the API (code: {}'.format(r.status))
                 elif r.status == 200:
-                    data = json.loads(await r.text())
-                    top_season = max(data['rankedSeasons'].keys())  # Most recent season played
+                    try:
+                        data = json.loads(await r.text())
+                        top_season = max(data['rankedSeasons'].keys())  # Most recent season played
 
-                    em = Embed()
-                    em.set_thumbnail(url=top_rank_thumb.format(self.__get_highest_tier(data['rankedSeasons'][top_season])))
-                    em.set_author(name='Rocket League Rankings For {}'.format(data['displayName']), icon_url=embed_icon)
-                    em.set_footer(text='Last Update: {}'.format(
-                        datetime.fromtimestamp(data['updatedAt']).strftime('%Y-%m-%d %H:%M:%S')
-                    ))
-
-                    for k, v in data['rankedSeasons'][top_season].items():
-                        em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
-                            [key for key, value in tiers.items() if value == str(v['tier'])][0],
-                            v['rankPoints'],
-                            int(v['division']) + 1,
-                            v['matchesPlayed']
+                        em = Embed()
+                        em.set_thumbnail(url=top_rank_thumb.format(self.__get_highest_tier(data['rankedSeasons'][top_season])))
+                        em.set_author(name='Rocket League Rankings For {}'.format(data['displayName']), icon_url=embed_icon)
+                        em.set_footer(text='Last Update: {}'.format(
+                            datetime.fromtimestamp(data['updatedAt']).strftime('%Y-%m-%d %H:%M:%S')
                         ))
-                    await ctx.send(embed=em)
+
+                        for k, v in data['rankedSeasons'][top_season].items():
+                            em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
+                                [key for key, value in tiers.items() if value == str(v['tier'])][0],
+                                v['rankPoints'],
+                                int(v['division']) + 1,
+                                v['matchesPlayed']
+                            ))
+                        await ctx.send(embed=em)
+                    except ValueError:
+                        await ctx.send('```[ERROR] Player "{}" has not played any competetive matches yet.```'.format(uid))
                 else:
                     log.error('Something went wrong when accessing the API (code: {})'.format(r.status))
 
