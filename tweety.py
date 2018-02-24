@@ -8,6 +8,7 @@ import traceback
 import datetime
 import os
 from discord.ext import commands
+from utils.misc import splash_screen
 
 plugins = [
     'cogs.admin',
@@ -37,7 +38,7 @@ class Tweety(commands.Bot):
         if not hasattr(self, 'base'):
             self.base = os.path.dirname(os.path.abspath(__file__))
 
-        print('Logged in as: {}\nID: {}\n--------'.format(self.user, self.user.id))
+        splash_screen(self.user.id, self.user)
 
     async def on_message(self, message):
         if message.author.bot:
