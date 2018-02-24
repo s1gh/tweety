@@ -24,7 +24,7 @@ class Currency:
 
         q = re.findall('^(\d*\.?\d+)\s([a-zA-Z]+$)', message.content)
 
-        if q:
+        if q and q[0][1].upper() in self.coin_data.keys():
             async with self.bot.session.get(crypto_api.format('pricemultifull?fsyms=' + q[0][1].upper() + '&tsyms=EUR')) as r:
                 if r.status == 200:
                     data = json.loads(await r.text())
@@ -59,7 +59,7 @@ class Currency:
 
                         await message.channel.send(embed=em)
 
-    def __unload(self):  # Make sure the background task is destroyed if the extension is unloaded.
+    def __unload(self):  # Make sure the background task is destroyed if the cog is unloaded.
         self.coins_download_task.cancel()
 
     async def coins_background_task(self):
