@@ -1,5 +1,9 @@
+try:
+    import config
+except ImportError:
+    print('Error: Could not start the bot. Please make sure the config file exist in the root directory.')
+    exit()
 import aiohttp
-import config
 import traceback
 import datetime
 import os
