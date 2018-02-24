@@ -4,16 +4,33 @@ import discord
 import os
 import logging
 import sys
+import subprocess
+import imghdr
 from collections import deque
 from discord.ext import commands
 from utils import checks
 
 log = logging.getLogger(__name__)
 
+allowed_image_types = [
+    'jpeg',
+    'png'
+]
+
 
 class Admin:
     def __init__(self, tweety):
         self.bot = tweety
+
+    @commands.command(hidden=True, name='exec')
+    @checks.is_admin()
+    async def execute(self, ctx, *, command: str):
+        try:
+            out = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).communicate()[0].strip().decode('utf-8')
+            await ctx.send('```python\n{}```'.format(out))
+        except Exception as err:
+            print(err)
+            return
 
     @commands.command(hidden=True)
     @checks.is_admin()
@@ -110,15 +127,28 @@ class Admin:
         else:
             await self.bot.change_presence(game=discord.Game(name=game))
 
-    @commands.command(hidden=True)
+    @commands.command(hidden=True)  # InvalidArgument – Wrong image format passed for avatar.
     @checks.is_admin()
     async def avatar(self, ctx, *, filename : str=None):
-        try:
-            with open('avatars/{}'.format(filename), 'rb') as f:
-                await self.bot.user.edit(avatar=f.read())
-        except IOError:
-            await ctx.send('```py\n{}\n```'.format(traceback.format_exc()))
+        if filename is None:
+            try:
+                with open('avatars/tweety_angry.png', 'rb') as f:
+                    await self.bot.user.edit(avatar=f.read())
+                    log.info('Restored avatar back to the default value.')
+            except IOError:
+                await ctx.send('```py\n{}\n```'.format(traceback.format_exc()))
+            except discord.errors.HTTPException as err:
+                log.error(err)
 
+        elif filename.startswith('http'):
+            try:
+                async with self.bot.session.get(filename) as in_file:
+                    img = await in_file.read()
+                    if imghdr.what(file=' ', h=img) in allowed_image_types:
+                        await self.bot.user.edit(avatar=img)
+                        log.info('Downloaded image and updated profile to reflect avatar change.')
+            except discord.errors.HTTPException as err:
+                log.error(err)
 
 
 def setup(bot):
