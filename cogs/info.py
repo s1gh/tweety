@@ -89,14 +89,14 @@ class Info:
 
         em = Embed()
         em.set_thumbnail(url=user.avatar_url)
-        em.set_author(name='Profile Information', icon_url=embed_profile_icon)
+        em.set_author(name='Profile Information')
         em.add_field(name='Display Name', value=user.display_name)
         em.add_field(name='Discriminator', value=user.discriminator)
         em.add_field(name='Created', value=user.created_at.strftime('%d/%m/%Y %H:%M:%S'))
         em.add_field(name='Joined', value=user.joined_at.strftime('%d/%m/%Y %H:%M:%S'))
         em.add_field(name='Account Type', value='User' if not user.bot else 'Bot')
         em.add_field(name='Roles', value=', '.join(x.name for x in user.roles), inline=False)
-        em.set_footer(text='Currently playing: {}'.format(user.game or 'Nothing'), icon_url=embed_gaming_icon)
+        em.set_footer(text='Currently playing: {}'.format(user.game or 'Nothing'))
 
         await ctx.send(embed=em)
 
@@ -104,6 +104,8 @@ class Info:
     async def profile_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send('```[ERROR] {}.```'.format(error))
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('```[ERROR] {}```'.format(error))
 
 def setup(bot):
     bot.add_cog(Info(bot))
