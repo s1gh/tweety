@@ -14,8 +14,11 @@ class Update:
     async def update_test(self, ctx):
         try:
             process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE)
-            log.info('Updated to the newest version.')
-            os.execv(sys.executable, ['python'] + sys.argv)
+            output = process.communicate()[0]
+            up = output.strip().decode('utf-8')
+            if up != 'Already up-to-date.':
+                log.info('Updated to the newest version.')
+                os.execv(sys.executable, ['python'] + sys.argv)
         except Exception as err:
             log.error(err)
 
