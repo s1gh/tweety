@@ -83,7 +83,6 @@ class Rocketleague:
                         ))
 
                         for k, v in sorted(data['rankedSeasons'][top_season].items()):
-                            print(k)
                             em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
                                 [key for key, value in tiers.items() if value == str(v['tier'])][0],
                                 v['rankPoints'],
