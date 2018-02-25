@@ -33,7 +33,7 @@ class Update:
 
     @commands.command(hidden=True, name='autoupdate')
     @checks.is_admin()
-    async def activate_auto_update(self, ctx, up: bool = False):
+    async def auto_update(self, ctx, up: bool = False):
         self.auto_update = up
 
         if up:
