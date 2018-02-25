@@ -51,7 +51,7 @@ class Update:
                         os.execv(sys.executable, ['python'] + sys.argv)
                 except Exception as err:
                     log.error(err)
-            await asyncio.sleep(update_time * 60)  # Check for updates every 10 minutes
+            await asyncio.sleep(update_time * 6)  # Check for updates every 10 minutes  ## DEBUGGING EVERY 60 SEC
 
     def __unload(self):  # Make sure the background task is destroyed if the cog is unloaded.
         log.warning('Update service is now unloaded and inactive. The bot will NOT automatically update!!')
