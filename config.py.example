@@ -8,3 +8,5 @@ omdb_api_key = ''
 
 github_access_token = ''
 git_repo_name = 'tweety'
+
+rocketleague_api_key = ''
