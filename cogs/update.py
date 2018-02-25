@@ -31,15 +31,12 @@ class Update:
     async def manual_update(self, ctx):
         await self.update()
 
-    @commands.command(hidden=True)
+    @commands.command(hidden=True, name='autoupdate')
     @checks.is_admin()
     async def set_auto_update(self, ctx, up: bool = False):
         self.auto_update = up
 
-        if up:
-            log.warning('Auto update is now set to True.')
-        else:
-            log.warning('Auto update is now set to False.')
+        log.warning('Auto update is now set to {}'.format(up))
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
