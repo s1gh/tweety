@@ -15,7 +15,7 @@ plugins = [
     'cogs.info',
     'cogs.troll',
     'cogs.cryptocurrency',
-    'cog.currency'
+    'cogs.currency'
     'cogs.update'
 ]
 
