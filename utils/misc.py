@@ -56,7 +56,7 @@ class Birthday:
     def __suffix(self, d):
         return 'th' if 11 <= d <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(d % 10, 'th')
 
-def splash_screen(uid, name):
+def splash_screen():
     print(" _________________________________________")
     print("< I wonder what that puddy tat up to now? >")
     print(" -----------------------------------------")
