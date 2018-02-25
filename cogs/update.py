@@ -21,10 +21,7 @@ class Update:
                 os.execv(sys.executable, ['python'] + sys.argv)
         except Exception as err:
             log.error(err)
-            
-    @commands.command()
-    async def testing(self, ctx):
-        await ctx.send('Update feature is working. This function was pulled from Github. Jey')
+
 
 def setup(bot):
     bot.add_cog(Update(bot))
