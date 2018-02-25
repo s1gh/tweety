@@ -21,7 +21,7 @@ class Update:
             output = process.communicate()[0]
             up = output.strip().decode('utf-8')
             if up != 'Already up-to-date.':
-                log.info('Updated to the newest version.')
+                log.info('Updated to the latest version.')
                 os.execv(sys.executable, ['python'] + sys.argv)
         except Exception as err:
             log.error(err)
