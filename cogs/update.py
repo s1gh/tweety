@@ -36,8 +36,8 @@ class Update:
     async def set_auto_update(self, ctx, up: bool = False):
         self.auto_update = up
         log.warning('Auto update is now set to {}'.format(up))
-        
-        await ctx.send('```[INFO] Auto update is now set to {}'.format(up))
+
+        await ctx.send('```[INFO] Auto update is now set to {}```'.format(up))
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
