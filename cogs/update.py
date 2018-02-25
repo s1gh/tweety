@@ -43,7 +43,7 @@ class Update:
         while not self.bot.is_closed():
             if self.auto_update:
                 try:
-                    self.update()
+                    await self.update()
                 except Exception as err:
                     log.error(err)
             await asyncio.sleep(update_time * 6)  # Check for updates every 10 minutes  ## DEBUGGING EVERY 60 SEC
