@@ -5,14 +5,12 @@ import re
 
 log = logging.getLogger(__name__)
 
-currency_api = 'https://api.fixer.io/latest?base=NOK'
+currency_api = 'http://api.fixer.io/latest?symbols=NOK&base={}'
 
 
 class Currency:
     def __init__(self, tweety):
         self.bot = tweety
-        self.currencies = {}
-        self.currency_update_task = self.bot.loop.create_task(self.currency_updater())
 
     async def on_message(self, message):
         if message.author.bot:
@@ -20,31 +18,17 @@ class Currency:
 
         q = re.findall('^(\d*\.?\d+)\s([a-zA-Z]+$)', message.content)
 
-        if q and q[0][1].upper() in self.currencies.keys():
-            total = float(q[0][0]) * float(self.currencies[q[0][1].upper()])
-
-            await self.bot.send_message(message.channel, '```{}```'.format(total))
-
-    async def currency_updater(self):
-        await self.bot.wait_until_ready()
-
-        while not self.bot.is_closed():
-            async with self.bot.session.get(currency_api) as r:
+        if q:
+            async with self.bot.session.get(currency_api.format(q[0][1])) as r:
                 if r.status == 200:
                     try:
                         currency = json.loads(await r.text())
+                        total = float(currency['rates']['NOK']) * float(q[0][0])
 
-                        for k,v in currency['rates'].items():
-                            self.currencies[k] = v
+                        await message.channel.send('```{} {}```'.format(total, list(currency['rates'].keys())[0]))
 
-                        log.info('Downloaded the latest exchange rates with base {}.'.format(currency['base']))
-                    except Exception as err:
-                        log.error(err)
-
-            await asyncio.sleep(6 * 3600)  # Update every 6 hours
-
-    def __unload(self):  # Make sure the background task is destroyed if the cog is unloaded.
-        self.currency_update_task.cancel()
+                    except KeyError:
+                        log.error('Something went wrong with the following request: {}'.format(message.content))
 
 
 def setup(bot):
