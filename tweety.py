@@ -15,7 +15,8 @@ plugins = [
     'cogs.info',
     'cogs.troll',
     'cogs.currency',
-    'cogs.update'
+    'cogs.update',
+    'cogs.testing'
 ]
 
 class Tweety(commands.Bot):
