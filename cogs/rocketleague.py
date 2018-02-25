@@ -82,7 +82,8 @@ class Rocketleague:
                             datetime.fromtimestamp(data['updatedAt']).strftime('%Y-%m-%d %H:%M:%S')
                         ))
 
-                        for k, v in data['rankedSeasons'][top_season].items():
+                        for k, v in sorted(data['rankedSeasons'][top_season].items()):
+                            print(k)
                             em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
                                 [key for key, value in tiers.items() if value == str(v['tier'])][0],
                                 v['rankPoints'],
@@ -91,7 +92,7 @@ class Rocketleague:
                             ))
                         await ctx.send(embed=em)
                     except ValueError:
-                        await ctx.send('```[ERROR] Player "{}" has not played any competetive matches yet.```'.format(uid))
+                        await ctx.send('```[ERROR] Player "{}" has not played any competitive matches yet.```'.format(uid))
                 else:
                     log.error('Something went wrong when accessing the API (code: {})'.format(r.status))
 
