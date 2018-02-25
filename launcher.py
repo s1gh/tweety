@@ -18,12 +18,11 @@ def setup_logging(args):
         log = logging.getLogger()
         log.setLevel(LOG_LEVEL)
 
-        coloredlogs.install(fmt=fmt)
-
         if args.verbose:
             verbose = logging.StreamHandler(sys.stdout)
             verbose.setFormatter(logging.Formatter(fmt))
             log.addHandler(verbose)
+            coloredlogs.install(fmt=fmt, logger=logging.getLogger('discord').setLevel(LOG_LEVEL))
 
         handler = logging.FileHandler(filename='tweety.log', encoding='utf-8', mode='a')
         handler.setFormatter(logging.Formatter(fmt))
