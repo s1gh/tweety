@@ -21,7 +21,7 @@ class Update:
             output = process.communicate()[0]
             up = output.strip().decode('utf-8')
             if up != 'Already up-to-date.':
-                log.info('Updated to the latest version.')
+                log.debug('Updated to the latest version.')
                 os.execv(sys.executable, ['python'] + sys.argv)
         except Exception as err:
             log.error(err)
@@ -35,7 +35,7 @@ class Update:
     @checks.is_admin()
     async def activate_auto_update(self, ctx, auto_update: bool = False):
         self.auto_update = auto_update
-        log.info('Auto update is now set to {}'.format(auto_update))
+        log.debug('Auto update is now set to {}'.format(auto_update))
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
