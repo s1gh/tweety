@@ -18,9 +18,9 @@ class Currency:
         if message.author.bot:
             return
 
-        q = re.findall('^(\d*\.?\d+)\s([a-zA-Z]+)', message.content)
+        q = re.findall('^(\d*\.?\d+)\s([a-zA-Z]+$)', message.content)
 
-        if q[0][1].upper() in self.currencies.keys():
+        if q and q[0][1].upper() in self.currencies.keys():
             total = float(q[0][0] * float(self.currencies[q[0][1]]))
 
             await self.bot.send_message(message.channel, '```{}```'.format(total))
