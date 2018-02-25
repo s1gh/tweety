@@ -47,7 +47,7 @@ def main():
     args = parser.parse_args()
 
     with setup_logging(args):
-        splash_screen('sdsds', 'dsdsds')
+        splash_screen()
         run_bot()
 
 
