@@ -40,6 +40,7 @@ class Update:
             log.debug('Auto update is now set to {}'.format(up))
         except Exception as err:
             log.error(err)
+            print(err)
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
