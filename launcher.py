@@ -1,22 +1,32 @@
 #!/usr/bin/python
 
-import asyncio
-import logging
-import datetime
+import coloredlogs, logging
 import contextlib
+import argparse
+import sys
 from tweety import Tweety
+from utils.misc import splash_screen
+
+LOG_LEVEL = logging.INFO
 
 @contextlib.contextmanager
-def setup_logging():
+def setup_logging(args):
     try:
         # __enter__
-        logging.getLogger('discord').setLevel(logging.INFO)
-
+        fmt = '%(asctime)s:%(levelname)s:%(name)s->%(funcName)s: %(message)s'
+        logging.getLogger('discord').setLevel(LOG_LEVEL)
         log = logging.getLogger()
-        log.setLevel(logging.INFO)
-        handler = logging.FileHandler(
-            filename='tweety.log', encoding='utf-8', mode='a')
-        handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s->%(funcName)s: %(message)s'))
+        log.setLevel(LOG_LEVEL)
+
+        coloredlogs.install(fmt=fmt)
+
+        if args.verbose:
+            verbose = logging.StreamHandler(sys.stdout)
+            verbose.setFormatter(logging.Formatter(fmt))
+            log.addHandler(verbose)
+
+        handler = logging.FileHandler(filename='tweety.log', encoding='utf-8', mode='a')
+        handler.setFormatter(logging.Formatter(fmt))
         log.addHandler(handler)
 
         yield
@@ -28,14 +38,16 @@ def setup_logging():
             log.removeHandler(hdlr)
 
 def run_bot():
-    #loop = asyncio.get_event_loop()
-    #log = logging.getLogger()
     bot = Tweety()
     bot.run()
 
 def main():
-    #loop = asyncio.get_event_loop()
-    with setup_logging():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--verbose', action='store_true', help='Increase output verbosity.')
+    args = parser.parse_args()
+
+    with setup_logging(args):
+        splash_screen('sdsds', 'dsdsds')
         run_bot()
 
 
