@@ -10,3 +10,5 @@ github_access_token = ''
 github_repo_name = 'tweety'
 
 rocketleague_api_key = ''
+
+auto_update = True
