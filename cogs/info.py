@@ -1,3 +1,7 @@
+"""
+This module allows users to get information from various sources.
+"""
+
 import discord
 import sys
 import os
@@ -11,6 +15,8 @@ from utils.misc import Embed, LinesOfCode, Uptime, Birthday
 bot_info_thumb = 'https://s22.postimg.org/bgtc198pt/tweety_angry.png'
 python_icon = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/' \
               'Python-logo-notext.svg/2000px-Python-logo-notext.svg.png'
+plugin_embed_thumb = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97' \
+                     '/Circle-icons-plugin.svg/2000px-Circle-icons-plugin.svg.png'
 
 class Info:
     def __init__(self, tweety):
@@ -35,6 +41,17 @@ class Info:
             em.set_footer(text='Created with Python {} | Latest commit: {}'.format(sys.version[:6], last_git_sha_hash[:7]), icon_url=python_icon)
 
             await ctx.send(embed=em)
+
+    @info.command(name='plugins')
+    async def list_plugins(self, ctx):
+        em = Embed()
+        em.set_thumbnail(url=plugin_embed_thumb)
+        em.set_author(name='Plugins')
+
+        for k, v in self.bot.extensions.items():
+            em.add_field(name=k[5:].capitalize(), value=v.__doc__ or 'No docstring found.', inline=False)
+
+        await ctx.send(embed=em)
 
     @info.command(name='commit')
     async def last_commit(self, ctx):
