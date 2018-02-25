@@ -11,4 +11,5 @@ github_repo_name = 'tweety'
 
 rocketleague_api_key = ''
 
-auto_update = True
+update_auto = True
+update_time = 10
