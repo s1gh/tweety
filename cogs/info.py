@@ -19,6 +19,7 @@ class Info:
 
     @commands.group()
     async def info(self, ctx):
+        """Get info about the bot or other users"""
         if ctx.invoked_subcommand is None:
             last_git_sha_hash = self.github.get_commits(sha='master')[0].sha
 
@@ -31,15 +32,17 @@ class Info:
             em.add_field(name="Loaded Plugins", value=str(len(self.bot.extensions)))
             em.add_field(name="Developer", value="s1gh#9750")
             em.add_field(name="Birthday", value=Birthday(self.bot.user.created_at).get_birthday())
-            em.set_footer(text='Created with Python {} | Latest commit: {}'.format(sys.version[:6], last_git_sha_hash[:10]), icon_url=python_icon)
+            em.set_footer(text='Created with Python {} | Latest commit: {}'.format(sys.version[:6], last_git_sha_hash[:7]), icon_url=python_icon)
 
             await ctx.send(embed=em)
 
     @info.command(name='commit')
     async def last_commit(self, ctx):
+        """Get the latest commit to Github"""
+
         commit = self.github.get_commits(sha='master')[0]
 
-        await ctx.send('```[{}] {}: {}```'.format(commit.commit.last_modified, commit.sha[:10], commit.commit.message))
+        await ctx.send('```[{}] {}: {}```'.format(commit.commit.last_modified, commit.sha[:7], commit.commit.message))
 
     @info.command()
     async def uptime(self, ctx):
@@ -78,7 +81,7 @@ class Info:
 
     @info.command()
     async def server(self, ctx):
-        """Fetch information about the server"""
+        """Get information about the server"""
 
         em = Embed()
         em.set_author(name=ctx.guild.name)
@@ -93,7 +96,7 @@ class Info:
 
     @info.command(aliases=['about'])
     async def profile(self, ctx, *, user : discord.Member):
-        """Fetch information about a user"""
+        """Get information about a user"""
 
         em = Embed()
         em.set_thumbnail(url=user.avatar_url)
