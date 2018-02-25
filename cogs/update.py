@@ -31,7 +31,7 @@ class Update:
     async def manual_update(self, ctx):
         await self.update()
 
-    @commands.command(hidden=True, name='autoupdate')
+    @commands.command(hidden=True)
     @checks.is_admin()
     async def auto_update(self, ctx, up: bool = False):
         self.auto_update = up
