@@ -8,6 +8,10 @@ class Testing:
     async def test_update_function(self, ctx):
         await ctx.send('This function was pulled from Github. Everything is working! :)')
 
+    @commands.command()
+    async def test_auto_update(self, ctx):
+        await ctx.send('Automatic update is now working. Jey! :)')
+
 
 def setup(bot):
     bot.add_cog(Testing(bot))
