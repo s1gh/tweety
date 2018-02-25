@@ -13,3 +13,5 @@ rocketleague_api_key = ''
 
 update_auto = True
 update_time = 10
+
+currency_base = 'NOK'
