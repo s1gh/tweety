@@ -41,7 +41,7 @@ class Currency:
                     except Exception as err:
                         log.error(err)
 
-            asyncio.sleep(6 * 3600)  # Update every 6 hours
+            await asyncio.sleep(6 * 3600)  # Update every 6 hours
 
 
 def setup(bot):
