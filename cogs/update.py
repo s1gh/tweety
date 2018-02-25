@@ -33,9 +33,9 @@ class Update:
 
     @commands.command(hidden=True, name='autoupdate')
     @checks.is_admin()
-    async def activate_auto_update(self, ctx, auto_update: bool = False):
-        self.auto_update = auto_update
-        log.debug('Auto update is now set to {}'.format(auto_update))
+    async def activate_auto_update(self, ctx, up: bool = False):
+        self.auto_update = up
+        log.debug('Auto update is now set to {}'.format(up))
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
