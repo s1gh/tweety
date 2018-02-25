@@ -15,6 +15,22 @@ class Update:
         self.updater = self.bot.loop.create_task(self.updater_service())
         self.auto_update = update_auto
 
+    async def update_func(self):
+        try:
+            process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE)
+            output = process.communicate()[0]
+            up = output.strip().decode('utf-8')
+            if up != 'Already up-to-date.':
+                log.info('Updated to the newest version.')
+                os.execv(sys.executable, ['python'] + sys.argv)
+        except Exception as err:
+            log.error(err)
+
+    @commands.command(hidden=True, name='update')
+    @checks.is_admin()
+    async def manual_update(self, ctx):
+        await self.update_func()
+
     @commands.command(hidden=True, name='autoupdate')
     @checks.is_admin()
     async def activate_auto_update(self, ctx, auto_update: bool = False):
