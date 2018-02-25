@@ -21,7 +21,7 @@ class Currency:
         q = re.findall('^(\d*\.?\d+)\s([a-zA-Z]+$)', message.content)
 
         if q and q[0][1].upper() in self.currencies.keys():
-            total = float(q[0][0] * float(self.currencies[q[0][1]]))
+            total = float(q[0][0]) * float(self.currencies[q[0][1].upper()])
 
             await self.bot.send_message(message.channel, '```{}```'.format(total))
 
@@ -42,6 +42,9 @@ class Currency:
                         log.error(err)
 
             await asyncio.sleep(6 * 3600)  # Update every 6 hours
+
+    def __unload(self):  # Make sure the background task is destroyed if the cog is unloaded.
+        self.currency_update_task.cancel()
 
 
 def setup(bot):
