@@ -31,11 +31,18 @@ class Currency:
         while not self.bot.is_closed():
             async with self.bot.session.get(currency_api) as r:
                 if r.status == 200:
-                    currency = json.loads(await r.text())
+                    try:
+                        currency = json.loads(await r.text())
 
-                    for k,v in currency['rates'].items():
-                        self.currencies[k] = v
+                        for k,v in currency['rates'].items():
+                            self.currencies[k] = v
 
-                    log.info('Downloaded the latest exchange rates with base {}.'.format(currency['base']))
+                        log.info('Downloaded the latest exchange rates with base {}.'.format(currency['base']))
+                    except Exception as err:
+                        log.error(err)
 
             asyncio.sleep(6 * 3600)  # Update every 6 hours
+
+
+def setup(bot):
+    bot.add_cog(Currency(bot))
