@@ -1,5 +1,5 @@
 """
-This module allows users to get information from various sources.
+This module allows users to get information about members, the server, last update on Github etc.
 """
 
 import discord
@@ -99,7 +99,7 @@ class Info:
     @info.command()
     async def server(self, ctx):
         """Get information about the server"""
-
+        print(dir(ctx.guild))
         em = Embed()
         em.set_author(name=ctx.guild.name)
         em.set_thumbnail(url=ctx.guild.icon_url)
