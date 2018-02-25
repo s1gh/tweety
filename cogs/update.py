@@ -53,9 +53,6 @@ class Update:
         log.warning('Update service is now unloaded and inactive. The bot will NOT automatically update!!')
         self.updater.cancel()
 
-    def __load(self):
-        log.info('Update service is now loaded.')
-
 
 def setup(bot):
     bot.add_cog(Update(bot))
