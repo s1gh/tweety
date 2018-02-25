@@ -15,7 +15,7 @@ class Update:
         self.updater = self.bot.loop.create_task(self.updater_service())
         self.auto_update = update_auto
 
-    async def update_func(self):
+    async def update(self):
         try:
             process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE)
             output = process.communicate()[0]
@@ -29,7 +29,7 @@ class Update:
     @commands.command(hidden=True, name='update')
     @checks.is_admin()
     async def manual_update(self, ctx):
-        await self.update_func()
+        await self.update()
 
     @commands.command(hidden=True, name='autoupdate')
     @checks.is_admin()
@@ -43,12 +43,7 @@ class Update:
         while not self.bot.is_closed():
             if self.auto_update:
                 try:
-                    process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE)
-                    output = process.communicate()[0]
-                    up = output.strip().decode('utf-8')
-                    if up != 'Already up-to-date.':
-                        log.info('Updated to the newest version.')
-                        os.execv(sys.executable, ['python'] + sys.argv)
+                    self.update()
                 except Exception as err:
                     log.error(err)
             await asyncio.sleep(update_time * 6)  # Check for updates every 10 minutes  ## DEBUGGING EVERY 60 SEC
