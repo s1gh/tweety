@@ -37,9 +37,9 @@ class Update:
         self.auto_update = up
 
         if up:
-            log.debug('Auto update is now set to True.')
+            log.warning('Auto update is now set to True.')
         else:
-            log.debug('Auto update is now set to False.')
+            log.warning('Auto update is now set to False.')
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
