@@ -35,7 +35,7 @@ class Update:
     @checks.is_admin()
     async def activate_auto_update(self, ctx, up: bool = False):
         self.auto_update = up
-        log.debug('Auto update is now set to {}'.format(up))
+        log.debug('Auto update is now set to {}'.format(str(up)))
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
