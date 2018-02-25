@@ -14,7 +14,7 @@ plugins = [
     'cogs.rocketleague',
     'cogs.info',
     'cogs.troll',
-    'cogs.currency',
+    'cogs.cryptocurrency',
     'cogs.update'
 ]
 
