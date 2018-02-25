@@ -26,14 +26,14 @@ class Update:
         except Exception as err:
             log.error(err)
 
-    @commands.command(hidden=True, name='update')
+    @commands.command(hidden=True, name='updatenow')
     @checks.is_admin()
     async def manual_update(self, ctx):
         await self.update()
 
     @commands.command(hidden=True)
     @checks.is_admin()
-    async def auto_update(self, ctx, up: bool = False):
+    async def set_auto_update(self, ctx, up: bool = False):
         self.auto_update = up
 
         if up:
