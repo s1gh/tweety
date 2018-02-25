@@ -14,7 +14,8 @@ plugins = [
     'cogs.rocketleague',
     'cogs.info',
     'cogs.troll',
-    'cogs.currency'
+    'cogs.currency',
+    'cogs.update'
 ]
 
 class Tweety(commands.Bot):
