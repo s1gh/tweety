@@ -3,6 +3,116 @@ import os
 import datetime
 import discord
 import random
+import json
+import logging
+
+log = logging.getLogger(__name__)
+
+class Episode:
+    def __init__(self, episode: json):
+        self._show_name = episode['name']
+        self._runtime = episode['runtime']
+        self._genres = episode['genres']
+        self._premiered = episode['premiered']
+        self._status = True if episode['status'] == 'Running' else False
+        self._show_poster = episode['image']['medium']
+        try:
+            self._imdb = 'https://www.imdb.com/title/' + episode['externals']['imdb']
+        except KeyError:
+            self._imdb = 'https://www.imdb.com/'
+        try:
+            self._network = episode['network']['name']
+        except KeyError:
+            self._network = 'N/A'
+
+        if self._status:
+            self._episode = '{:02d}'.format(int(episode['_embedded']['nextepisode']['number']))
+            self._season = '{:02d}'.format(int(episode['_embedded']['nextepisode']['season']))
+            self._season_episode = 'S{}E{}'.format(self._season, self._episode)
+            self._url = episode['_embedded']['nextepisode']['url']
+            self._next_episode = self.air_date(episode['_embedded']['nextepisode']['airdate'])
+            self._name = episode['_embedded']['nextepisode']['name']
+            try:
+                self._summary = episode['_embedded']['nextepisode']['summary'].replace('<p>', '').replace('</p>', '')
+            except AttributeError:
+                self._summary = 'Not yet available.'
+            except KeyError:
+                self._summary = 'Not yet available.'
+
+        self._rating = episode['rating']['average']
+
+    def air_date(self, airdate):
+        today = datetime.datetime.strptime(str(datetime.date.today()), '%Y-%m-%d')
+        ep_date = datetime.datetime.strptime(airdate, '%Y-%m-%d')
+        days = ep_date - today
+
+        return (ep_date.strftime('%d/%m/%Y') + ' (' + str(days.days + 1) + ' days)' if days.days > 0 else 'Tomorrow')
+
+    @property
+    def show_name(self):
+        return self._show_name
+
+    @property
+    def runtime(self):
+        return self._runtime
+
+    @property
+    def genres(self):
+        return self._genres
+
+    @property
+    def premiered(self):
+        return self._premiered
+
+    @property
+    def status(self):
+        return self._status
+
+    @property
+    def show_poster(self):
+        return self._show_poster
+
+    @property
+    def summary(self):
+        return self._summary
+
+    @property
+    def imdb(self):
+        return self._imdb
+
+    @property
+    def network(self):
+        return self._network
+
+    @property
+    def url(self):
+        return self._url
+
+    @property
+    def season_episode(self):
+        return self._season_episode
+
+    @property
+    def rating(self):
+        return self._rating
+
+    @property
+    def next_episode(self):
+        return self._next_episode
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def season(self):
+        return self._season
+
+    @property
+    def episode(self):
+        return self._episode
+
+
 
 class Embed(discord.Embed):
     def __init__(self, **kvargs):
