@@ -16,7 +16,9 @@ plugins = [
     'cogs.troll',
     'cogs.cryptocurrency',
     'cogs.currency',
-    'cogs.update'
+    'cogs.update',
+    'cogs.tvmaze',
+    'cogs.alias'
 ]
 
 class Tweety(commands.Bot):
@@ -26,18 +28,18 @@ class Tweety(commands.Bot):
         self.client_id = config.discord_client_id
         self.session = aiohttp.ClientSession(loop=self.loop)
 
+    async def on_ready(self):
+        if not hasattr(self, 'uptime'):
+            self.uptime = datetime.datetime.utcnow()
+        if not hasattr(self, 'base'):
+            self.base = os.path.dirname(os.path.abspath(__file__))
+
         for plugin in plugins:
             try:
                 self.load_extension(plugin)
             except Exception as err:
                 print('Failed to load plugin {}'.format(plugin))
                 traceback.print_exc()
-
-    async def on_ready(self):
-        if not hasattr(self, 'uptime'):
-            self.uptime = datetime.datetime.utcnow()
-        if not hasattr(self, 'base'):
-            self.base = os.path.dirname(os.path.abspath(__file__))
 
     async def on_message(self, message):
         if message.author.bot:
