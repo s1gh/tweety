@@ -1,5 +1,4 @@
 import logging
-import json
 from discord.ext import commands
 from utils.misc import Episode, Embed
 
@@ -16,9 +15,9 @@ class Tvmaze:
     async def nextepisode(self, ctx, *, show: str):
         async with self.bot.session.get(api_url.format(show)) as r:
             if r.status == 200:
-                ep = Episode(json.loads(await r.text()))
+                ep = Episode(await r.json())
 
-                if not ep.status:
+                if not ep.running:
                     await ctx.send('``[INFO] Show has ended or been cancelled.``')
                 else:
                     em = Embed(url=ep.url, title='S{}E{} - {}'.format(ep.season, ep.episode, ep.name))
