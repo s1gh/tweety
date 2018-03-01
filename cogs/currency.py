@@ -1,6 +1,4 @@
-import json
 import logging
-import asyncio
 import re
 
 log = logging.getLogger(__name__)
@@ -22,7 +20,7 @@ class Currency:
             async with self.bot.session.get(currency_api.format(q[0][1])) as r:
                 if r.status == 200:
                     try:
-                        currency = json.loads(await r.text())
+                        currency = await r.json()
                         total = float(currency['rates']['NOK']) * float(q[0][0])
 
                         await message.channel.send('```{} {}```'.format(total, list(currency['rates'].keys())[0]))
