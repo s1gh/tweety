@@ -72,6 +72,8 @@ class Alias:
             msg = '\n'.join('{} → {}{}'.format(k, prefix[0], v) for k, v in aliases.items())
 
             await ctx.send('**Aliases for {}**\n```{}```'.format(ctx.author.name, msg))
+        else:
+            await ctx.send('```[INFO] {}```'.format('You have not created any aliases yet.'))
 
     @alias.error
     @add.error
