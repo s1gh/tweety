@@ -1,4 +1,3 @@
-import json
 import logging
 import asyncio
 import re
@@ -27,7 +26,7 @@ class Currency:
         if q and q[0][1].upper() in self.coin_data.keys():
             async with self.bot.session.get(crypto_api.format('pricemultifull?fsyms=' + q[0][1].upper() + '&tsyms=EUR')) as r:
                 if r.status == 200:
-                    data = json.loads(await r.text())
+                    data = await r.json()
 
                     if data['RAW']:
                         em = Embed(url='https://www.cryptocompare.com{}'.format(self.coin_data[q[0][1].upper()]['URL']),
@@ -61,6 +60,8 @@ class Currency:
 
     def __unload(self):  # Make sure the background task is destroyed if the cog is unloaded.
         self.coins_download_task.cancel()
+        log.warning('Downloader task is now unloaded.')
+
 
     async def coins_background_task(self):
         await self.bot.wait_until_ready()
@@ -68,7 +69,7 @@ class Currency:
         while not self.bot.is_closed():
             async with self.bot.session.get(crypto_api.format('all/coinlist')) as r:
                 if r.status == 200:
-                    data = json.loads(await r.text())
+                    data = await r.json()
                     for coin in data['Data'].items():
                         try:
                             self.coin_data[coin[1]['Name']] = {
