@@ -1,5 +1,4 @@
 import logging
-import json
 from math import ceil
 from discord.ext import commands
 
@@ -21,7 +20,7 @@ class Troll:
             raise commands.BadArgument
         async with self.bot.session.get(api_url.format(count)) as r:
             if r.status == 200:
-                data = json.loads(await r.text())
+                data = await r.json()
                 for pug in data['pugs']:
                     await ctx.send('https://{}'.format(pug.split('.', 1)[1]))
 
