@@ -16,7 +16,7 @@ class Episode:
         self._runtime = episode['runtime']
         self._genres = episode['genres']
         self._premiered = episode['premiered']
-        self._status = True if episode['status'] == 'Running' else False
+        self._running = True if episode['status'] == 'Running' else False
         self._show_poster = episode['image']['medium']
         try:
             self._imdb = 'https://www.imdb.com/title/' + episode['externals']['imdb']
@@ -27,7 +27,7 @@ class Episode:
         except KeyError:
             self._network = 'N/A'
 
-        if self._status:
+        if self._running:
             self._episode = '{:02d}'.format(int(episode['_embedded']['nextepisode']['number']))
             self._season = '{:02d}'.format(int(episode['_embedded']['nextepisode']['season']))
             self._season_episode = 'S{}E{}'.format(self._season, self._episode)
@@ -67,8 +67,8 @@ class Episode:
         return self._premiered
 
     @property
-    def status(self):
-        return self._status
+    def running(self):
+        return self._running
 
     @property
     def show_poster(self):
