@@ -20,10 +20,10 @@ class Update:
             process = subprocess.Popen(['git', 'pull', '--ff-only'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdoutput, stderroutput = process.communicate()
 
-            if process.returncode == 0:
+            if process.returncode == 0 and 'Already up-to-date.' not in stdoutput.decode('utf-8').strip():
                 log.info('Updated to the latest version.')
                 os.execv(sys.executable, ['python'] + sys.argv)
-            else:
+            elif process.returncode != 0:
                 log.critical('Update process failed. Your install seem to be broken. '
                       'You can try to repair the bot using the --repair argument at startup.')
         except Exception as err:
