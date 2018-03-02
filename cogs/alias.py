@@ -12,8 +12,8 @@ class Alias:
         try:
             with open('data/{}/{}'.format(self.bot.base, 'alias_map.json'), 'r') as f:
                 self.alias_map = json.load(f)
-        except IOError:
-            pass
+        except IOError as err:
+            log.info('Could not find alias_map.json. Creating a new file.')
         except json.decoder.JSONDecodeError as err:
             log.error('JSON: {}'.format(err))
 
