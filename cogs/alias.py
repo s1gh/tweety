@@ -1,6 +1,7 @@
 import json
 import logging
 from copy import copy
+from os import stat
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -10,12 +11,16 @@ class Alias:
         self.bot = tweety
         self.alias_map = {}
         try:
-            with open('data/{}/{}'.format(self.bot.base, 'alias_map.json'), 'r') as f:
+            with open('{}/data/{}'.format(self.bot.base, 'alias_map.json'), 'r') as f:
                 self.alias_map = json.load(f)
-        except IOError as err:
-            log.info('Could not find alias_map.json. Creating a new file.')
+        except FileNotFoundError as err:
+            with open('{}/data/{}'.format(self.bot.base, 'alias_map.json'), 'x'):
+                log.info('Could not find alias_map.json. Creating a new file.')
         except json.decoder.JSONDecodeError as err:
-            log.error('JSON: {}'.format(err))
+            if stat('{}/data/{}'.format(self.bot.base, 'alias_map.json')).st_size == 0:
+                pass
+            else:
+                log.error('JSON: {}'.format(err))
 
     @commands.group()
     async def alias(self, ctx):  # !alias add <alias> <command (and args) without prefix>
@@ -33,7 +38,7 @@ class Alias:
                 else:
                     self.alias_map[uid].update({alias_name:command})
 
-                with open('data/{}/{}'.format(self.bot.base, 'alias_map.json'), 'w') as f:
+                with open('{}/data/{}'.format(self.bot.base, 'alias_map.json'), 'w') as f:
                     json.dump(self.alias_map, f)
             except IOError:
                 log.error('Could not write to alias_map.json.')
