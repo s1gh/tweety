@@ -17,12 +17,15 @@ class Update:
 
     async def update(self):
         try:
-            process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE)
-            output = process.communicate()[0]
-            up = output.strip().decode('utf-8')
-            if up != 'Already up-to-date.':
-                log.debug('Updated to the latest version.')
+            process = subprocess.Popen(['git', 'pull', '--ff-only'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdoutput, stderroutput = process.communicate()
+
+            if process.returncode == 0:
+                log.info('Updated to the latest version.')
                 os.execv(sys.executable, ['python'] + sys.argv)
+            else:
+                log.critical('Update process failed. Your install seem to be broken. '
+                      'You can try to repair the bot using the --repair argument at startup.')
         except Exception as err:
             log.error(err)
 
