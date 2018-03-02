@@ -132,7 +132,7 @@ class Admin:
     async def avatar(self, ctx, *, filename : str=None):
         if filename is None:
             try:
-                with open('avatars/tweety_angry.png', 'rb') as f:
+                with open('data/avatars/tweety_angry.png', 'rb') as f:
                     await self.bot.user.edit(avatar=f.read())
                     log.info('Restored avatar back to the default value.')
             except IOError:
