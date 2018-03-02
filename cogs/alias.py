@@ -10,7 +10,7 @@ class Alias:
         self.bot = tweety
         self.alias_map = {}
         try:
-            with open('{}/{}'.format(self.bot.base, 'alias_map.json'), 'r') as f:
+            with open('data/{}/{}'.format(self.bot.base, 'alias_map.json'), 'r') as f:
                 self.alias_map = json.load(f)
         except IOError:
             pass
@@ -33,7 +33,7 @@ class Alias:
                 else:
                     self.alias_map[uid].update({alias_name:command})
 
-                with open('{}/{}'.format(self.bot.base, 'alias_map.json'), 'w') as f:
+                with open('data/{}/{}'.format(self.bot.base, 'alias_map.json'), 'w') as f:
                     json.dump(self.alias_map, f)
             except IOError:
                 log.error('Could not write to alias_map.json.')
