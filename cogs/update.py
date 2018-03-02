@@ -48,7 +48,7 @@ class Update:
         while not self.bot.is_closed():
             if self.auto_update:
                 try:
-                    log.info('Checking for new updates...')
+                    log.info('Checking repository for new updates.')
                     await self.update()
                 except Exception as err:
                     log.error(err)
