@@ -5,6 +5,8 @@ import discord
 import random
 import json
 import logging
+import subprocess
+import sys
 
 log = logging.getLogger(__name__)
 
@@ -165,6 +167,16 @@ class Birthday:
 
     def __suffix(self, d):
         return 'th' if 11 <= d <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(d % 10, 'th')
+
+def git_repair():
+    process = subprocess.Popen(['git', 'reset', '--hard'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdoutput, stderroutput = process.communicate()
+
+    if process.returncode == 0:
+        log.warning('Tweety has been repaired successfully. All files are now reset to the last commit.')
+    else:
+        log.critical('Repair procedure failed.')
+        sys.exit(-1)
 
 def splash_screen():
     print(" _________________________________________")

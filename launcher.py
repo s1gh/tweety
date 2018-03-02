@@ -5,7 +5,7 @@ import contextlib
 import argparse
 import sys
 from tweety import Tweety
-from utils.misc import splash_screen
+from utils.misc import splash_screen, git_repair
 
 LOG_LEVEL = logging.INFO
 
@@ -18,15 +18,17 @@ def setup_logging(args):
         log = logging.getLogger()
         log.setLevel(LOG_LEVEL)
 
+        handler = logging.FileHandler(filename='tweety.log', encoding='utf-8', mode='a')
+        handler.setFormatter(logging.Formatter(fmt))
+        log.addHandler(handler)
+
         if args.verbose:
             verbose = logging.StreamHandler(sys.stdout)
             verbose.setFormatter(logging.Formatter(fmt))
             log.addHandler(verbose)
             coloredlogs.install(fmt=fmt, logger=logging.getLogger('discord').setLevel(LOG_LEVEL))
-
-        handler = logging.FileHandler(filename='tweety.log', encoding='utf-8', mode='a')
-        handler.setFormatter(logging.Formatter(fmt))
-        log.addHandler(handler)
+        if args.repair:
+            git_repair()
 
         yield
     finally:
@@ -42,7 +44,8 @@ def run_bot():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', action='store_true', help='Increase output verbosity.')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Show every message being logged by the bot.')
+    parser.add_argument('-r', '--repair', action='store_true', help='Attempts to repair a broken version of the bot.')
     args = parser.parse_args()
 
     with setup_logging(args):
