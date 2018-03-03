@@ -1,10 +1,12 @@
 import logging
+from datetime import datetime
 from discord.ext import commands
 from utils.misc import Episode, Embed
 
 log = logging.getLogger(__name__)
 
-api_url = 'http://api.tvmaze.com/singlesearch/shows?q={}&embed=nextepisode'
+#api_url = 'http://api.tvmaze.com/singlesearch/shows?q={}&embed=nextepisode'
+api_url = 'http://api.tvmaze.com/singlesearch/shows?q={}&embed[]=nextepisode&embed[]=previousepisode'
 
 
 class Tvmaze:
@@ -28,6 +30,11 @@ class Tvmaze:
                     em.add_field(name='Next Episode', value=ep.next_episode, inline=True)
                     em.add_field(name='Runtime', value='{} Minutes'.format(ep.runtime), inline=True)
                     em.add_field(name='Episode Summary', value=ep.summary, inline=False)
+
+                    if ep.previous_episode_name is not None:
+                        em.set_footer(text='Previous episode: {} ({})'.format(ep.previous_episode_name,
+                                                                              datetime.strptime(ep.previous_episode_date,
+                                                                                                '%Y-%m-%d').strftime('%d/%m/%Y')))
 
                     await ctx.send(embed=em)
 
