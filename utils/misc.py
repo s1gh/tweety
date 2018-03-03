@@ -43,6 +43,13 @@ class Episode:
             except KeyError:
                 self._summary = 'Not yet available.'
 
+        try:
+            self._previous_episode_name = episode['_embedded']['previousepisode']['name']
+            self._previous_episode_date = episode['_embedded']['previousepisode']['airdate']
+        except Exception:
+            self._previous_episode_name = None
+            self._previous_episode_date = None
+
         self._rating = episode['rating']['average']
 
     def air_date(self, airdate):
@@ -51,6 +58,14 @@ class Episode:
         days = ep_date - today
 
         return (ep_date.strftime('%d/%m/%Y') + ' (' + str(days.days + 1) + ' days)' if days.days > 0 else 'Tomorrow')
+
+    @property
+    def previous_episode_name(self):
+        return self._previous_episode_name
+
+    @property
+    def previous_episode_date(self):
+        return self._previous_episode_date
 
     @property
     def show_name(self):
