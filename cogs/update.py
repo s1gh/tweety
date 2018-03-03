@@ -29,7 +29,7 @@ class Update:
         except Exception as err:
             log.error(err)
 
-    @commands.command(hidden=True, name='updatenow')
+    @commands.command(hidden=True, name='update')
     @checks.is_admin()
     async def manual_update(self, ctx):
         await self.update()
