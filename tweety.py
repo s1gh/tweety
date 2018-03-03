@@ -24,7 +24,6 @@ plugins = [
 class Tweety(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or('!!'), description='', pm_help=None)
-
         self.client_id = config.discord_client_id
         self.session = aiohttp.ClientSession(loop=self.loop)
 
