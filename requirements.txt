@@ -3,3 +3,4 @@ pygithub
 pymongo
 aiohttp
 aioodbc
+uvloop
