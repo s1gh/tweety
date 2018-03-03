@@ -6,6 +6,7 @@ import discord
 import sys
 import os
 import inspect
+import subprocess
 from config import github_access_token, github_repo_name
 from github import Github
 from pymongo import version as pymongo_version
@@ -28,6 +29,11 @@ class Info:
         """Get info about the bot or other users"""
         if ctx.invoked_subcommand is None:
             last_git_sha_hash = self.github.get_commits(sha='master')[0].sha
+            process = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            local_hash = process.communicate()[0].decode('utf-8').strip()
+
+            update_status = '{}'.format('Running the latest version of Tweety.' if last_git_sha_hash == local_hash
+                                        else 'New update available.')
 
             em = Embed()
             em.set_thumbnail(url=bot_info_thumb)
@@ -35,10 +41,11 @@ class Info:
             em.add_field(name="Library", value='Discord.py ({})'.format(discord.__version__))
             em.add_field(name="Database", value='MongoDB ({})'.format(pymongo_version))
             em.add_field(name="Lines of Code", value=LinesOfCode().loc(root=self.bot.base))
-            em.add_field(name="Loaded Plugins", value=str(len(self.bot.extensions)))
+            em.add_field(name="Plugins", value=str(len(self.bot.extensions)))
             em.add_field(name="Developer", value="s1gh#9750")
             em.add_field(name="Birthday", value=Birthday(self.bot.user.created_at).get_birthday())
-            em.set_footer(text='Created with Python {} | Latest commit: {}'.format(sys.version[:6], last_git_sha_hash[:7]), icon_url=python_icon)
+            em.set_footer(text='Created with Python {} | Status: {}'.format(sys.version[:6], update_status),
+                          icon_url=python_icon)
 
             await ctx.send(embed=em)
 
