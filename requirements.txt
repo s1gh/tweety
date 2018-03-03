@@ -2,3 +2,4 @@ coloredlogs
 pygithub
 pymongo
 aiohttp
+aioodbc
