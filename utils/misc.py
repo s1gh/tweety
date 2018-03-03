@@ -16,11 +16,13 @@ class Episode:
         self._runtime = episode['runtime']
         self._genres = episode['genres']
         self._premiered = episode['premiered']
-        self._running = True if episode['status'] == 'Running' else False
+        self._running = True if episode['status'] == 'Running' or episode['status'] == 'In Development' else False
         self._show_poster = episode['image']['medium']
         try:
             self._imdb = 'https://www.imdb.com/title/' + episode['externals']['imdb']
         except KeyError:
+            self._imdb = 'https://www.imdb.com/'
+        except TypeError:
             self._imdb = 'https://www.imdb.com/'
         try:
             self._network = episode['network']['name']
