@@ -52,7 +52,7 @@ class Update:
                     await self.update()
                 except Exception as err:
                     log.error(err)
-            await asyncio.sleep(update_time * 360)  # Check for updates every hour
+            await asyncio.sleep(update_time * 60)  # Check for updates every hour
 
     def __unload(self):  # Make sure the background task is destroyed if the cog is unloaded.
         log.warning('Update service is now unloaded and inactive. The bot will NOT automatically update!!')
