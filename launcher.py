@@ -4,8 +4,11 @@ import coloredlogs, logging
 import contextlib
 import argparse
 import sys
+import asyncio
+import aioodbc
 from tweety import Tweety
 from utils.misc import splash_screen, git_repair
+from config import db_name, db_pool_size
 
 LOG_LEVEL = logging.INFO
 
@@ -39,8 +42,25 @@ def setup_logging(args):
             log.removeHandler(hdlr)
 
 def run_bot():
+    loop = asyncio.get_event_loop()
+    log = logging.getLogger()
+
+    try:
+        pool = loop.run_until_complete(create_db_pool(loop))
+    except Exception:
+        log.critical('Could not setup database. Exiting.')
+        return
+
     bot = Tweety()
+    bot.pool = pool
     bot.run()
+
+async def create_db_pool(loop):
+    dsn = 'Driver=SQLite3;Database=data/{}'.format(db_name)
+    pool = await aioodbc.create_pool(dsn=dsn, loop=loop, minsize=db_pool_size, maxsize=db_pool_size)
+
+    return pool
+
 
 def main():
     parser = argparse.ArgumentParser()
