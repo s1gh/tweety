@@ -11,3 +11,7 @@ In a linux environment pyodbc (hence aioodbc) requires the unixODBC library. You
 Then you can use pip to install aioodbc:
     
     $ pip install aioodbc
+
+### Windows
+    git pull git@github.com:s1gh/tweety.git
+    pip install -r requirements.txt
