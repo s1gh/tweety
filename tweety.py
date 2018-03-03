@@ -2,7 +2,7 @@ try:
     import config
 except ImportError:
     print('Error: Could not start the bot. Please make sure the config file exist in the root directory.')
-    exit()
+    raise SystemExit
 import aiohttp
 import traceback
 import datetime
