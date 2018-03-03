@@ -1,11 +1,18 @@
 #!/usr/bin/python
 
-import coloredlogs, logging
+import logging
+import coloredlogs
 import contextlib
 import argparse
 import sys
 import asyncio
 import aioodbc
+try:
+    import uvloop
+except ImportError:
+    pass
+else:
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 from tweety import Tweety
 from utils.misc import splash_screen, git_repair
 from config import db_name, db_pool_size
