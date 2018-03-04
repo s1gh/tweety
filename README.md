@@ -1,17 +1,11 @@
 # Tweety Discord Bot
 Repository for the complete rewrite of Tweety.
 
+## Requirements
+PostgreSQL
+
 ## Setup
 ### Linux
-In a linux environment pyodbc (hence aioodbc) requires the unixODBC library. You can install it using your package manager, for example:
+To install PostgreSQL do the following
 
-    $ sudo apt-get install unixodbc
-    $ sudo apt-get install unixodbc-dev
-
-Then you can use pip to install aioodbc:
-    
-    $ pip install aioodbc
-
-### Windows
-    git pull git@github.com:s1gh/tweety.git
-    pip install -r requirements.txt
+    $ sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
