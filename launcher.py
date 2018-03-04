@@ -6,7 +6,7 @@ import contextlib
 import argparse
 import sys
 import asyncio
-import aioodbc
+import asyncpg
 try:
     import uvloop
 except ImportError:
@@ -15,7 +15,8 @@ else:
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 from tweety import Tweety
 from utils.misc import splash_screen, git_repair
-from config import db_name, db_pool_size
+from utils.database import Database
+from config import db_name,db_user, db_pool_size, db_host, db_passwd
 
 LOG_LEVEL = logging.INFO
 
@@ -50,22 +51,22 @@ def setup_logging(args):
 
 def run_bot():
     loop = asyncio.get_event_loop()
-    log = logging.getLogger()
+    log = logging.getLogger(__name__)
 
     try:
-        pool = loop.run_until_complete(create_db_pool(loop))
+        pool = loop.run_until_complete(create_db_pool(loop))  # Create the database pool
     except Exception:
-        log.critical('Could not setup database. Exiting.')
+        log.critical('Could not create database pool. Exiting.')
         return
+    loop.run_until_complete(Database.init_tables(pool))  # Use the created database pool to init all tables
 
     bot = Tweety()
     bot.pool = pool
     bot.run()
 
 async def create_db_pool(loop):
-    dsn = 'Driver=SQLite3;Database=data/{}'.format(db_name)
-    pool = await aioodbc.create_pool(dsn=dsn, loop=loop, minsize=db_pool_size, maxsize=db_pool_size)
-
+    pool = await asyncpg.create_pool(host=db_host, user=db_user, password=db_passwd,
+                                     database=db_name, min_size=db_pool_size, max_size=db_pool_size)
     return pool
 
 
