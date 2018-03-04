@@ -7,6 +7,15 @@ log = logging.getLogger(__name__)
 
 api_url = 'http://api.tvmaze.com/singlesearch/shows?q={}&embed[]=nextepisode&embed[]=previousepisode'
 
+"""
+RUNNING CODES
+-----------------------
+0 - Cancelled
+1 - Running
+2 - No info available
+-----------------------
+"""
+
 class Tvmaze:
     def __init__(self, tweety):
         self.bot = tweety
@@ -17,9 +26,9 @@ class Tvmaze:
             if r.status == 200:
                 ep = Episode(await r.json())
 
-                if not ep.running:
+                if ep.running == 0:
                     await ctx.send('``[INFO] Show has ended or been cancelled.``')
-                else:
+                elif ep.running == 1:
                     em = Embed(url=ep.url, title='S{}E{} - {}'.format(ep.season, ep.episode, ep.name))
                     em.set_author(name=ep.show_name, url=ep.imdb)
                     em.set_thumbnail(url=ep.show_poster)
@@ -33,8 +42,10 @@ class Tvmaze:
                         em.set_footer(text='Previous episode: {} ({})'.format(ep.previous_episode_name,
                                                                               datetime.datetime.strptime(ep.previous_episode_date,
                                                                                                          '%Y-%m-%d').strftime('%d/%m/%Y')))
-
                     await ctx.send(embed=em)
+                else:
+                    await ctx.send('```[STATUS] {}```'.format('Returning show. No more information '
+                                                              'available at this time.'))
 
 class Episode:
     def __init__(self, episode):
@@ -42,7 +53,7 @@ class Episode:
         self._runtime = episode['runtime']
         self._genres = episode['genres']
         self._premiered = episode['premiered']
-        self._running = True if episode['status'] == 'Running' or episode['status'] == 'In Development' else False
+        self._running = 1 if episode['status'] == 'Running' or episode['status'] == 'In Development' else 0
         self._show_poster = episode['image']['medium']
         try:
             self._imdb = 'https://www.imdb.com/title/' + episode['externals']['imdb']
@@ -56,7 +67,11 @@ class Episode:
             self._network = 'N/A'
 
         if self._running:
-            self._episode = '{:02d}'.format(int(episode['_embedded']['nextepisode']['number']))
+            try:
+                self._episode = '{:02d}'.format(int(episode['_embedded']['nextepisode']['number']))
+            except KeyError:
+                self._running = 3
+                return
             self._season = '{:02d}'.format(int(episode['_embedded']['nextepisode']['season']))
             self._season_episode = 'S{}E{}'.format(self._season, self._episode)
             self._url = episode['_embedded']['nextepisode']['url']
