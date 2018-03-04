@@ -2,5 +2,5 @@ coloredlogs
 pygithub
 pymongo
 aiohttp
-aioodbc
 uvloop
+asyncpg
