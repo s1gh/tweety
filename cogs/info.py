@@ -12,6 +12,7 @@ from github import Github
 from pymongo import version as pymongo_version
 from discord.ext import commands
 from utils.misc import Embed, LinesOfCode, Uptime, Birthday
+from utils.database import Database
 
 bot_info_thumb = 'https://s22.postimg.org/bgtc198pt/tweety_angry.png'
 python_icon = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/' \
@@ -19,35 +20,38 @@ python_icon = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/' \
 plugin_embed_thumb = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97' \
                      '/Circle-icons-plugin.svg/2000px-Circle-icons-plugin.svg.png'
 
-class Info:
+class Info(Database):
     def __init__(self, tweety):
         self.bot = tweety
         self.github = Github(github_access_token).get_user().get_repo(github_repo_name)
+        super().__init__(self.bot.pool)
+
 
     @commands.group()
     async def info(self, ctx):
         """Get info about the bot or other users"""
         if ctx.invoked_subcommand is None:
-            last_git_sha_hash = self.github.get_commits(sha='master')[0].sha
-            process = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            local_hash = process.communicate()[0].decode('utf-8').strip()
+            async with ctx.typing():
+                last_git_sha_hash = self.github.get_commits(sha='master')[0].sha
+                process = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                local_hash = process.communicate()[0].decode('utf-8').strip()
 
-            update_status = '{}'.format('Running the latest version of Tweety.' if last_git_sha_hash == local_hash
-                                        else 'New update available.')
+                update_status = '{}'.format('Running the latest version of Tweety.' if last_git_sha_hash == local_hash
+                                            else 'New update available.')
 
-            em = Embed()
-            em.set_thumbnail(url=bot_info_thumb)
-            em.set_author(name='Tweety', url='https://github.com/s1gh/tweety/')
-            em.add_field(name="Library", value='Discord.py ({})'.format(discord.__version__))
-            em.add_field(name="Database", value='MongoDB ({})'.format(pymongo_version))
-            em.add_field(name="Lines of Code", value=LinesOfCode().loc(root=self.bot.base))
-            em.add_field(name="Plugins", value=str(len(self.bot.extensions)))
-            em.add_field(name="Developer", value="s1gh#9750")
-            em.add_field(name="Birthday", value=Birthday(self.bot.user.created_at).get_birthday())
-            em.set_footer(text='Created with Python {} | Status: {}'.format(sys.version[:6], update_status),
-                          icon_url=python_icon)
+                em = Embed()
+                em.set_thumbnail(url=bot_info_thumb)
+                em.set_author(name='Tweety', url='https://github.com/s1gh/tweety/')
+                em.add_field(name="Library", value='Discord.py ({})'.format(discord.__version__))
+                em.add_field(name="Database", value='PostgreSQL {}'.format(await self.get_db_version()))
+                em.add_field(name="Lines of Code", value=LinesOfCode().loc(root=self.bot.base))
+                em.add_field(name="Plugins", value=str(len(self.bot.extensions)))
+                em.add_field(name="Developer", value="s1gh#9750")
+                em.add_field(name="Birthday", value=Birthday(self.bot.user.created_at).get_birthday())
+                em.set_footer(text='Created with Python {} | Status: {}'.format(sys.version[:6], update_status),
+                              icon_url=python_icon)
 
-            await ctx.send(embed=em)
+                await ctx.send(embed=em)
 
     @info.command(name='plugins')
     async def list_plugins(self, ctx):
