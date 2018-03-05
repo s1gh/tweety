@@ -17,7 +17,7 @@ class Tags(Database):
         lookup = tag.lower()
 
         try:
-            tag = await self.select('SELECT tag_content, server_id FROM tags WHERE tag_id = $1 LIMIT 1', [lookup,])
+            tag = await self.query('SELECT tag_content, server_id FROM tags WHERE tag_id = $1 LIMIT 1', [lookup,])
         except Exception as err:
             log.error(err)
         else:
@@ -34,11 +34,11 @@ class Tags(Database):
             tag_id.lower(),
             tag_content.lower(),
             datetime.now(),
-            ctx.message.guild.id
+            ctx.message.guild.id,
         ]
 
         try:
-            await self.insert('INSERT INTO tags (member_id, tag_id, tag_content, timestamp, server_id) '
+            await self.execute('INSERT INTO tags (member_id, tag_id, tag_content, timestamp, server_id) '
                               'VALUES ($1, $2, $3, $4, $5)', params)
         except exceptions.UniqueViolationError:
             await ctx.send('```[ERROR] {}```'.format('A tag with that name already exist.'))
@@ -47,15 +47,40 @@ class Tags(Database):
         else:
             await ctx.send('```[INFO] {}```'.format('Tag successfully created.'))
 
-    @add.error
-    async def add_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            pass
+    @tag.command(alises=['update', 'change'])
+    async def edit(self, ctx, tag_id: str, *, tag_content: str):
+        params = [
+            tag_content,
+            ctx.message.author.id,
+            tag_id,
+        ]
+
+        try:
+            ret = await self.execute('UPDATE tags SET tag_content = $1 WHERE member_id = $2 AND tag_id = $3', params)
+            if int(ret[-1:]):
+                await ctx.send('```[INFO] {}```'.format('Successfully modified the tag.'))
+        except Exception as err:
+            log.error(err)
+
+    @tag.command(aliases=['rm', 'remove'])
+    async def delete(self, ctx, tag_id: str):
+        params = [
+            ctx.message.author.id,
+            tag_id,
+        ]
+        try:
+            ret = await self.execute('DELETE FROM tags WHERE member_id = $1 AND tag_id = $2', params)
+            if int(ret[-1:]):
+                await ctx.send('```[INFO] {}```'.format('Tag successfully removed.'))
+        except Exception as err:
+            log.error(err)
+
     @tag.error
+    @edit.error
+    @add.error
     async def tag_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send('```[ERROR] {}```'.format(error))
-
 
 
 def setup(bot):
