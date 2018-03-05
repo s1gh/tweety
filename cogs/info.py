@@ -48,7 +48,7 @@ class Info(Database):
                 em.add_field(name="Plugins", value=str(len(self.bot.extensions)))
                 em.add_field(name="Developer", value="s1gh#9750")
                 em.add_field(name="Birthday", value=Birthday(self.bot.user.created_at).get_birthday())
-                em.set_footer(text='Created with Python {} | Status: {}'.format(sys.version[:6], update_status),
+                em.set_footer(text='Created with Python {} | {}'.format(sys.version[:6], update_status),
                               icon_url=python_icon)
 
                 await ctx.send(embed=em)
