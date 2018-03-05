@@ -18,7 +18,9 @@ plugins = [
     'cogs.currency',
     'cogs.update',
     'cogs.tvmaze',
-    'cogs.alias'
+    'cogs.alias',
+    'cogs.customcommand',
+    'cogs.tags'
 ]
 
 class Tweety(commands.Bot):
