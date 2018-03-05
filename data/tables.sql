@@ -5,3 +5,12 @@ CREATE TABLE chatlog (
   timestamp    timestamp,
   server_id    bigint
 );
+CREATE TABLE tags (
+  id          serial PRIMARY KEY,
+  member_id   bigint,
+  tag_id      text,
+  tag_content text,
+  timestamp   timestamp,
+  server_id   bigint,
+  UNIQUE(tag_id)
+);
