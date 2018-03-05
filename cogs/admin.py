@@ -54,7 +54,7 @@ class Admin:
     @checks.is_admin()
     async def restart(self, ctx):
         try:
-            await ctx.send('```[INFO] Restarting...```')
+            await ctx.send('```[INFO] Restarting Tweety.```')
             log.info('Restarted Discord Bot ({}))'.format(ctx.message.author))
             os.execv(sys.executable, ['python'] + sys.argv)
         except Exception as err:
