@@ -12,10 +12,21 @@ class Database:
         async with self.pool.acquire() as connection:
             try:
                 version = await connection.fetch('SHOW SERVER_VERSION')
-                return [x for x in version[0].values()][0]
             except Exception as err:
                 log.error(err)
-                return None
+                return 'N/A'
+            else:
+                return version[0]['server_version']
+
+    async def insert(self, query, params):
+        async with self.pool.acquire() as connection:
+            res = await connection.execute(query, *params)
+            return res
+
+    async def select(self, query, params):
+        async with self.pool.acquire() as connection:
+            res = await connection.fetch(query, *params)
+            return res
 
     @classmethod
     async def init_tables(cls, pool):
@@ -30,3 +41,5 @@ class Database:
             except Exception as err:
                 log.error(err)
                 sys.exit(-1)
+            else:
+                log.info('Successfully created database tables.')
