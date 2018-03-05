@@ -1,5 +1,5 @@
 CREATE TABLE chatlog (
-  id           serial  PRIMARY KEY,
+  id           serial PRIMARY KEY,
   member_id    bigint,
   message      text,
   timestamp    timestamp,
@@ -12,5 +12,5 @@ CREATE TABLE tags (
   tag_content text,
   timestamp   timestamp,
   server_id   bigint,
-  UNIQUE(tag_id)
+  UNIQUE(tag_id, server_id)
 );
