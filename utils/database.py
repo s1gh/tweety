@@ -18,12 +18,12 @@ class Database:
             else:
                 return version[0]['server_version']
 
-    async def insert(self, query, params):
+    async def execute(self, query, params):
         async with self.pool.acquire() as connection:
             res = await connection.execute(query, *params)
             return res
 
-    async def select(self, query, params):
+    async def query(self, query, params):
         async with self.pool.acquire() as connection:
             res = await connection.fetch(query, *params)
             return res
