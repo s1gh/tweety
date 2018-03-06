@@ -4,6 +4,7 @@ from datetime import datetime
 from discord.ext import commands
 from utils.database import Database
 from asyncpg import exceptions
+from utils import checks
 
 log = logging.getLogger(__name__)
 loop = asyncio.get_event_loop()
@@ -19,6 +20,7 @@ class CustomCommand(Database):
     async def cc(self, ctx):
         pass
 
+    @checks.is_admin()
     @cc.command()
     async def add(self, ctx, trigger_word: str, trigger_text: str):
         params = [
