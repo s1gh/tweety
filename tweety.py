@@ -20,7 +20,8 @@ plugins = [
     'cogs.tvmaze',
     'cogs.alias',
     'cogs.customcommand',
-    'cogs.tags'
+    'cogs.tags',
+    'cogs.chatlog'
 ]
 
 class Tweety(commands.Bot):
