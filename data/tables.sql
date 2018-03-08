@@ -22,4 +22,18 @@ CREATE TABLE custom_command (
   timestamp     timestamp,
   server_id     bigint,
   UNIQUE(trigger_word, server_id)
-)
+);
+CREATE TABLE members (
+  id          serial PRIMARY KEY,
+  member_id   bigint,
+  last_played timestamp,
+  server_id   bigint,
+  UNIQUE(member_id, server_id)
+);
+CREATE TABLE games (
+  id        serial PRIMARY KEY,
+  member_id bigint,
+  server_id bigint,
+  game      text,
+  game_time int
+);
