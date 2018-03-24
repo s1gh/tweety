@@ -19,21 +19,6 @@ class Stats(Database):
         pass
 
     @analytics.command()
-    async def alltime(self, ctx):
-        try:
-            res = await self.query('SELECT member_id, SUM(game_time) '
-                                   'FROM games '
-                                   'WHERE server_id = $1 '
-                                   'GROUP BY games.member_id '
-                                   'ORDER BY sum DESC LIMIT 10', [ctx.guild.id])
-        except Exception as err:
-            log.error(err)
-        else:
-            for data in res:
-                member = discord.utils.get(ctx.guild.members, id=data['member_id'])
-                print(member.name)
-
-    @analytics.command()
     async def topgames(self, ctx):
         try:
             res = await self.query('SELECT game, SUM(game_time) '
@@ -77,11 +62,6 @@ class Stats(Database):
                 place += 1
             await ctx.send(embed=em)
 
-
-    @analytics.command()
-    async def player(self, ctx, member: discord.Member):
-        pass
-
     @analytics.command()
     async def spotify(self, ctx):
         try:
@@ -121,7 +101,6 @@ class Stats(Database):
             if after.game is not None and after.id not in self.tracking_map:
                 self.tracking_map[after.id] = {'status': str(after.game), 'time_started': int(time.time()),
                                                'server_id': before.guild.id}
-                #log.info('{} is now playing {}.'.format(after.name, str(after.game)))
 
                 params = [
                     before.id,
@@ -132,9 +111,8 @@ class Stats(Database):
                                    'VALUES ($1, $2, $3) '
                                    'ON CONFLICT (member_id, server_id) DO '
                                    'UPDATE SET last_played = \'{}\''.format(datetime.now()), params)
-            elif after.game is None:  # members.last_played should also be updated here to give an "accurate" timestamp
+            elif after.game is None:
                 play_time = int(time.time()) - self.tracking_map[before.id]['time_started']
-                #log.info('{} stopped playing {} after {} seconds.'.format(after.name, str(before.game), play_time))
 
                 params = [
                     before.id,
