@@ -21,7 +21,7 @@ class Currency:
         if message.author.bot:
             return
 
-        q = re.findall('^(\d*\.?\d+)\s([a-zA-Z]+$)', message.content)
+        q = re.findall('^(1)\s([a-zA-Z]+$)', message.content)
 
         if q and q[0][1].upper() in self.coin_data.keys():
             async with self.bot.session.get(crypto_api.format('pricemultifull?fsyms=' + q[0][1].upper() + '&tsyms=EUR')) as r:
