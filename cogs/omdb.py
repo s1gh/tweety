@@ -4,8 +4,8 @@ from utils.misc import Embed
 from config import omdb_api_key as api_key
 
 API_URL = 'http://www.omdbapi.com/?t={}&plot=short&apikey={}&y={}'
-USER_AGENT = {'User:Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0"'}
-EMBED_ICON = 'http://www.wallofwally.com/wp-content/uploads/google-tv-icon-logo-vector-ai-free-graphics-download-google-tv-logo-vector.png'
+EMBED_ICON = 'http://www.wallofwally.com/wp-content/uploads/google-tv-icon-' \
+             'logo-vector-ai-free-graphics-download-google-tv-logo-vector.png'
 
 log = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ class OMDB:
         self.bot = tweety
 
     @commands.command(aliases=['imdb'])
-    async def omdb(self, ctx, title: str, year: str = None):  # !!omdb "<moviename>" [YEAR]
+    async def omdb(self, ctx, title: str, year: str = None):
         async with self.bot.session.get(API_URL.format(title, api_key, year if year is not None else None)) as r:
             if r.status == 200:
                 resp = await r.json()
