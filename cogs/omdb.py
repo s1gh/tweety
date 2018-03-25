@@ -15,7 +15,7 @@ class OMDB:
 
     @commands.command(aliases=['imdb'])
     async def omdb(self, ctx, title: str, year: str = None):
-        async with self.bot.session.get(API_URL.format(title, api_key, year if year is not None else None)) as r:
+        async with self.bot.session.get(API_URL.format(title, api_key, year)) as r:
             if r.status == 200:
                 resp = await r.json()
                 if resp['Response'] == "True":
