@@ -21,7 +21,8 @@ plugins = [
     'cogs.alias',
     'cogs.customcommand',
     'cogs.tags',
-    'cogs.chatlog'
+    'cogs.chatlog',
+    'cogs.stats'
 ]
 
 class Tweety(commands.Bot):
