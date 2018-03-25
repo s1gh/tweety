@@ -35,5 +35,15 @@ CREATE TABLE games (
   member_id bigint,
   server_id bigint,
   game      text,
-  game_time int
+  game_time int,
+  timestamp timestamp
+);
+CREATE TABLE quotes (
+  id        serial PRIMARY KEY,
+  added_by  bigint,
+  server_id bigint,
+  quote     text,
+  author    text,
+  timestamp timestamp,
+  UNIQUE(author, quote)
 );
