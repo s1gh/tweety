@@ -52,6 +52,15 @@ class Uptime:
 
         return '{:2d} days, {:0d} hours, {:2d} minutes and {:2d} seconds'.format(d, h, m, s)
 
+class Seconds:
+    @classmethod
+    def human_readable(cls, seconds):
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        d, h = divmod(h, 24)
+
+        return '{:2d} days, {:0d} hours, {:2d} minutes and {:2d} seconds'.format(d, h, m, s)
+
 class Birthday:
     def __init__(self, created_at : datetime):
         self.birthday = created_at.strftime('%B {S}').replace('{S}', str(created_at.day) + self.__suffix(created_at.day))
