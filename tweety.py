@@ -22,7 +22,9 @@ plugins = [
     'cogs.customcommand',
     'cogs.tags',
     'cogs.chatlog',
-    'cogs.stats'
+    'cogs.stats',
+    'cogs.omdb',
+    'cogs.quotes'
 ]
 
 class Tweety(commands.Bot):
