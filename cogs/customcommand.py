@@ -21,7 +21,7 @@ class CustomCommand(Database):
         pass
 
     @checks.is_admin()
-    @cc.command()
+    @cc.command(aliases=['create'])
     async def add(self, ctx, trigger_word: str, trigger_text: str):
         params = [
             ctx.message.author.id,
@@ -39,12 +39,66 @@ class CustomCommand(Database):
         except Exception as err:
             log.error(err)
         else:
+            if ctx.guild.id in self.cc_map.keys():
+                self.cc_map[ctx.guild.id][trigger_word] = trigger_text
+            else:
+                self.cc_map[ctx.guild.id] = {trigger_word: trigger_text}
             await ctx.send('```[INFO] {}```'.format('Custom command successfully created.'))
+
+    @checks.is_admin()
+    @cc.command(aliases=['change', 'update'])
+    async def edit(self, ctx, trigger_word: str, trigger_text: str):
+        try:
+            ret = await self.execute('UPDATE custom_command '
+                                     'SET trigger_text = $1 '
+                                     'WHERE trigger_word = $2 AND server_id = $3', [trigger_text,
+                                                                                    trigger_word,
+                                                                                    ctx.guild.id])
+        except Exception as err:
+            log.error(err)
+        else:
+            if int(ret[-1:]):
+                self.cc_map[ctx.guild.id][trigger_word] = trigger_text
+                await ctx.send('```[INFO] Custom command "{}" updated successfully.```'.format(trigger_word))
+            else:
+                await ctx.send('```[ERROR] Could not update custom command "{}". '
+                               'Are you sure it exist on this guild?```'.format(trigger_word))
+
+    @checks.is_admin()
+    @cc.command(aliases=['remove', 'purge'])
+    async def delete(self, ctx, trigger_word: str):
+        try:
+            ret = await self.execute('DELETE FROM custom_command '
+                                   'WHERE server_id = $1 '
+                                   'AND trigger_word = $2', [ctx.guild.id, trigger_word])
+        except Exception as err:
+            log.error(err)
+        else:
+            if int(ret[-1:]):
+                del self.cc_map[ctx.guild.id][trigger_word]
+                await ctx.send('```[INFO] Custom command "{}" removed from database successfully.```'.format(trigger_word))
+            else:
+                await ctx.send('```[ERROR] Could not delete custom command "{}". Are you sure it exist?```'.format(trigger_word))
+
+    @cc.command(name='list')
+    async def _list(self, ctx):  # Use internal cc_map instead.
+        try:
+            res = await self.query('SELECT trigger_word '
+                                   'FROM custom_command '
+                                   'WHERE server_id = $1', [ctx.guild.id])
+        except Exception as err:
+            log.error(err)
+        else:
+            if len(res) > 0:
+                await ctx.send('**Custom Commands**\n```{}```'.format(', '.join([x['trigger_word'] for x in res])))
+            else:
+                await ctx.send('```[INFO] Could not find any custom commands for this guild.```')
 
 
     async def populate_commands(self):
         try:
-            commands = await self.query('SELECT trigger_word, trigger_text, server_id FROM custom_command', [])
+            commands = await self.query('SELECT trigger_word, trigger_text, server_id '
+                                        'FROM custom_command', [])
         except Exception as err:
             log.error(err)
         else:
