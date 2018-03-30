@@ -17,7 +17,7 @@ class ChatLog(Database):
         self.excluded_channels = self.load_excluded_channels()
 
     @checks.is_admin()
-    @commands.group()
+    @commands.group(hidden=True)
     async def chatlog(self, ctx):
         pass
 
