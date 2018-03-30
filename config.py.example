@@ -21,3 +21,8 @@ db_name = ''
 db_user = ''
 db_passwd = ''
 db_pool_size = 3
+
+streams_channel = ''
+
+twitch_client_id = ''
+
