@@ -16,7 +16,7 @@ class CustomCommand(Database):
         super().__init__(self.bot.pool)
         loop.create_task(self.populate_commands())
 
-    @commands.group()
+    @commands.group(hidden=True)
     async def cc(self, ctx):
         pass
 
