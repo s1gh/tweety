@@ -60,6 +60,7 @@ class Rocketleague:
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)  # 5 second cooldown per user
     async def rl(self, ctx, uid : str):
+        """Fetch competetive statistics for a given user"""
         async with ctx.channel.typing():
             async with self.bot.session.get(api_url + '/player?unique_id={}&platform_id=1&apikey={}'.format(uid, api_key)) as r:
                 if r.status != 200:
