@@ -5,7 +5,7 @@ from datetime import datetime
 from utils.misc import Embed
 
 crypto_api = 'https://min-api.cryptocompare.com/data/{}'
-embed_thumb = 'https://cdn2.iconfinder.com/data/icons/bitcoin-and-mining/44/trade-512.png'
+embed_thumb = 'https://i.pinimg.com/originals/56/77/71/567771a5c5be44ce7db912675f56829a.png'
 convert_to = 'EUR'
 
 log = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ class Currency:
                             data['RAW'][q[0][1].upper()][convert_to]['CHANGE24HOUR']
                         ))
 
-                        em.set_footer(text='Last Update: {}'.format(
+                        em.set_footer(text='Last updated: {}'.format(
                             datetime.fromtimestamp(data['RAW'][q[0][1].upper()][convert_to]['LASTUPDATE']).strftime('%Y-%m-%d %H:%M:%S')))
 
                         await message.channel.send(embed=em)
