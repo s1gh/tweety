@@ -24,6 +24,7 @@ class Alias:
 
     @commands.group()
     async def alias(self, ctx):  # !alias add <alias> <command (and args) without prefix>
+        """Create your own alias (shortcut) that references a command """
         pass
 
     @alias.command()
