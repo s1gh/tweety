@@ -16,6 +16,7 @@ class Stats(Database):
 
     @commands.group(aliases=['gamestats', 'games', 'stats'])
     async def analytics(self, ctx):
+        """Fetch information about the most popular games etc."""
         pass
 
     @analytics.command()
