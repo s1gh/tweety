@@ -5,7 +5,7 @@ from utils.misc import Embed
 from datetime import datetime
 from asyncpg import exceptions
 
-EMBED_THUMBNAIL = 'https://polybius.io/static/homepage/images/2015_quote_marks_close.png'
+EMBED_THUMBNAIL = 'http://www.guibingzhuche.com/data/out/269/1720508.png'
 
 log = logging.getLogger(__name__)
 
@@ -16,6 +16,7 @@ class Quotes(Database):
 
     @commands.group(invoke_without_command=True)
     async def quote(self, ctx, user: str):
+        """Handles quotes (adding, viewing etc.)"""
         try:
             quote = await self.query('SELECT COUNT(*) OVER (), q.* '
                                      'FROM quotes q '
@@ -24,7 +25,7 @@ class Quotes(Database):
             em = Embed()
             em.add_field(name=quote[0]['author'].title(), value='*"{}"*'.format(quote[0]['quote'].capitalize()))
             em.set_thumbnail(url=EMBED_THUMBNAIL)
-            em.set_footer(text='Added {} | Quotes: {} | ID: {}'.format(quote[0]['timestamp'].strftime('%Y-%m-%d %H:%M:%S'),
+            em.set_footer(text='Added: {} • Quotes: {} • ID: {}'.format(quote[0]['timestamp'].strftime('%Y-%m-%d %H:%M:%S'),
                                                                        quote[0]['count'], quote[0]['id']))
         except IndexError:
             await ctx.send('```[Info] {} doesn\'t have a quote, yet. Maybe you should add one?```'.format(user.title()))
@@ -88,7 +89,7 @@ class Quotes(Database):
             if int(ret[-1:]):
                 await ctx.send('```[INFO] Quote with ID {} deleted successfully.```'.format(id))
             else:
-                await ctx.send('```[ERROR] Could not delete quote with ID {}. You\'re not the owner of that quote.```')
+                await ctx.send('```[ERROR] Could not delete quote with ID {}. You\'re not the owner of this quote.```')
         except Exception as err:
             log.error(err)
 
