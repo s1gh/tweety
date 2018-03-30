@@ -60,7 +60,7 @@ class Info(Database):
         em.set_author(name='Plugins')
 
         for k, v in self.bot.extensions.items():
-            em.add_field(name=k[5:].capitalize(), value=v.__doc__ or 'No docstring found.', inline=False)
+            em.add_field(name=k[5:].capitalize(), value=v.__doc__ or 'No docstring found.', inline=True)
 
         await ctx.send(embed=em)
 
