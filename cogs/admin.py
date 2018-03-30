@@ -6,6 +6,7 @@ import logging
 import sys
 import subprocess
 import imghdr
+from utils.database import Database
 from collections import deque
 from discord.ext import commands
 from utils import checks
@@ -18,13 +19,28 @@ allowed_image_types = [
 ]
 
 
-class Admin:
+class Admin(Database):
     def __init__(self, tweety):
+        super().__init__(tweety.pool)
         self.bot = tweety
+
+    @checks.is_admin()
+    @commands.command(hidden=True, name='sql')
+    async def sql_query(self, ctx, query: str):
+        res = await self.query(query, [])
+        print(res)
+
+        await ctx.send('```sql\n{}\n```'.format([x for x in res]))
+
+    @sql_query.error
+    async def sql_error(self, ctx, error):
+        if isinstance(error, commands.CommandInvokeError):
+            log.error(error)
+            await ctx.send('```[ERROR] Database response is too big. Try limiting your result set using a LIMIT clause.```')
 
     @commands.command(hidden=True, name='exec')
     @checks.is_admin()
-    async def execute(self, ctx, *, command: str):
+    async def ex(self, ctx, *, command: str):
         try:
             out = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).communicate()[0].strip().decode('utf-8')
             await ctx.send('```python\n{}```'.format(out))
@@ -139,7 +155,15 @@ class Admin:
                 await ctx.send('```py\n{}\n```'.format(traceback.format_exc()))
             except discord.errors.HTTPException as err:
                 log.error(err)
-
+        elif not filename.startswith('http'):
+            try:
+                with open('data/avatars/{}'.format(filename), 'rb') as f:
+                    await self.bot.user.edit(avatar=f.read())
+                    log.info('Changed avatar to "{}".'.format(filename))
+            except IOError as err:
+                log.error(err)
+            except discord.errors.HTTPException as err:
+                log.error(err)
         elif filename.startswith('http'):
             try:
                 async with self.bot.session.get(filename) as in_file:
