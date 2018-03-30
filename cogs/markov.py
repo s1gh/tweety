@@ -13,23 +13,25 @@ class Markov(Database):
 
     @commands.command()
     async def markov(self, ctx, *, user: discord.Member=None):
-        try:
-            if user is None:
-                query = 'SELECT message FROM chatlog'
-            else:
-                query = 'SELECT message FROM chatlog WHERE member_id = $1'
+        """Uses a markov chain to create a sentence based on the chat history for this guild."""
+        async with ctx.typing():
+            try:
+                if user is None:
+                    query = 'SELECT message FROM chatlog'
+                else:
+                    query = 'SELECT message FROM chatlog WHERE member_id = $1'
 
-            txt = await self.query(query, [] if user is None else [user.id])
-            model = markovify.NewlineText('\n'.join(x['message'] for x in txt), state_size=3 if user is None else 2)
-            sentence = model.make_sentence(tries=250 if user is None else 500)
-        except Exception as err:
-            log.error(err)
-        else:
-            await ctx.send(sentence)
+                txt = await self.query(query, [] if user is None else [user.id])
+                model = markovify.NewlineText('\n'.join(x['message'] for x in txt), state_size=3 if user is None else 2)
+                sentence = model.make_sentence(tries=300 if user is None else 600)
+            except Exception as err:
+                log.error(err)
+            else:
+                await ctx.send(sentence)
 
     @markov.error
     async def markov_error(self, ctx, error):
-        await ctx.send('```[ERROR] {}.```'.format(error))
+        log.error(error)
 
 
 def setup(bot):
