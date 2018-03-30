@@ -14,6 +14,7 @@ class Tags(Database):
 
     @commands.group(invoke_without_command=True)
     async def tag(self, ctx, tag: str):
+        """Create your own tags/shortcuts to URLs or text"""
         lookup = tag.lower()
 
         try:
