@@ -24,12 +24,13 @@ plugins = [
     'cogs.chatlog',
     'cogs.stats',
     'cogs.omdb',
-    'cogs.quotes'
+    'cogs.quotes',
+    'cogs.markov'
 ]
 
 class Tweety(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=commands.when_mentioned_or('!!'), description='', pm_help=None)
+        super().__init__(command_prefix=commands.when_mentioned_or(*['?', '+']), description='', pm_help=None)
         self.client_id = config.discord_client_id
         self.session = aiohttp.ClientSession(loop=self.loop)
 
