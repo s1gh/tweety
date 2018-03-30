@@ -15,6 +15,8 @@ class OMDB:
 
     @commands.command(aliases=['imdb'])
     async def omdb(self, ctx, title: str, year: str = None):
+        """Fetch information about movies/tv series
+        Example: <prefix>omdb \"Movie\" YEAR"""
         async with self.bot.session.get(API_URL.format(title, api_key, year)) as r:
             if r.status == 200:
                 resp = await r.json()
