@@ -14,6 +14,7 @@ class Troll:
     @commands.command()
     @commands.cooldown(1, 180, commands.BucketType.guild)  # Can only be used 1 time per 180 seconds (server limit)
     async def pugbomb(self, ctx, count: int = 3):
+        """Most useless plugin ever. Troll other members of this guild"""
         if count > 20:
             raise commands.CheckFailure
         elif not isinstance(count, int):
