@@ -45,5 +45,6 @@ CREATE TABLE quotes (
   quote     text,
   author    text,
   timestamp timestamp,
-  UNIQUE(author, quote)
-);
+  UNIQUE(author, quote, server_id)
+
+)
