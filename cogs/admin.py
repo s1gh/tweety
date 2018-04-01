@@ -26,11 +26,13 @@ class Admin(Database):
 
     @checks.is_admin()
     @commands.command(hidden=True, name='sql')
-    async def sql_query(self, ctx, query: str):
-        res = await self.query(query, [])
-        print(res)
-
-        await ctx.send('```sql\n{}\n```'.format([x for x in res]))
+    async def sql_query(self, ctx, *, query: str):
+        try:
+            res = await self.query(query, [])
+        except Exception as err:
+            await ctx.send('```[ERROR] {}```'.format(err))
+        else:
+            await ctx.send('```sql\n{}\n```'.format([x for x in res]))
 
     @sql_query.error
     async def sql_error(self, ctx, error):
