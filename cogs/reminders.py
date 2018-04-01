@@ -50,6 +50,8 @@ class Reminders(Database):
 
     @commands.command(aliases=['reminder'])
     async def remindme(self, ctx, time: int, unit: str, *, reminder: str):
+        """A way for members to create their own reminders.
+        Example: remindme 15 minutes Take the pizza out of the oven."""
         try:
             if time < 0:
                 await ctx.send('```[ERROR] Time cannot be a negative value.```')
@@ -69,7 +71,9 @@ class Reminders(Database):
         except TypeError as err:
             log.error(err)
         else:
-            await ctx.send('Alright {}, I\'ll send you a PM in {} {}.'.format(ctx.message.author.mention, time, unit))
+            await ctx.send('Alright {}, I\'ll send you a PM in {} {}.'.format(ctx.message.author.mention,
+                                                                              time,
+                                                                              unit[:-1] if time == 1 else unit))
             self.reminder_list.append(Reminder(params[0], params[1], params[2], params[3], params[4]))
 
     async def fetch_from_db(self):
