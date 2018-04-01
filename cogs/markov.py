@@ -13,7 +13,7 @@ class Markov(Database):
 
     @commands.command()
     async def markov(self, ctx, *, user: discord.Member=None):
-        """Uses a markov chain to create a sentence based on the chat history for this guild."""
+        """Uses a markov chain to create a sentence based on the chat history for this guild/user."""
         async with ctx.typing():
             try:
                 if user is None:
@@ -27,7 +27,7 @@ class Markov(Database):
             except Exception as err:
                 log.error(err)
             else:
-                await ctx.send(sentence)
+                await ctx.send('"{}"'.format(sentence))
 
     @markov.error
     async def markov_error(self, ctx, error):
