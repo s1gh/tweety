@@ -67,7 +67,6 @@ class Info(Database):
     @info.command(name='commit')
     async def last_commit(self, ctx):
         """Get the latest commit to Github"""
-
         commit = self.github.get_commits(sha='master')[0]
 
         await ctx.send('```[{}] {}: {}```'.format(commit.commit.last_modified, commit.sha[:7], commit.commit.message))
