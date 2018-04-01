@@ -25,7 +25,7 @@ class Quotes(Database):
             em = Embed()
             em.add_field(name=quote[0]['author'].title(), value='*"{}"*'.format(quote[0]['quote'].capitalize()))
             em.set_thumbnail(url=EMBED_THUMBNAIL)
-            em.set_footer(text='Added: {} • Quotes: {} • ID: {}'.format(quote[0]['timestamp'].strftime('%Y-%m-%d %H:%M:%S'),
+            em.set_footer(text='Added: {} • Quotes: {} • ID: {}'.format(quote[0]['timestamp'].strftime('%d.%m.%y %H:%M:%S'),
                                                                        quote[0]['count'], quote[0]['id']))
         except IndexError:
             await ctx.send('```[Info] {} doesn\'t have a quote, yet. Maybe you should add one?```'.format(user.title()))
