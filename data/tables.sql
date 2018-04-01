@@ -50,6 +50,7 @@ CREATE TABLE quotes (
 CREATE TABLE reminders (
   id        serial PRIMARY KEY,
   member    bigint,
+  created   timestamp,
   server_id bigint,
   reminder  text,
   timestamp timestamp
