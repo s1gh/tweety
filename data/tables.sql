@@ -52,6 +52,5 @@ CREATE TABLE reminders (
   member    bigint,
   server_id bigint,
   reminder  text,
-  timestamp timestamp,
-  UNIQUE(member, server_id)
+  timestamp timestamp
 );
