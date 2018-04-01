@@ -46,5 +46,12 @@ CREATE TABLE quotes (
   author    text,
   timestamp timestamp,
   UNIQUE(author, quote, server_id)
-
-)
+);
+CREATE TABLE reminders (
+  id        serial PRIMARY KEY,
+  member    bigint,
+  server_id bigint,
+  reminder  text,
+  timestamp timestamp,
+  UNIQUE(member, server_id)
+);
