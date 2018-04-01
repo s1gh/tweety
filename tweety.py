@@ -25,7 +25,8 @@ plugins = [
     'cogs.stats',
     'cogs.omdb',
     'cogs.quotes',
-    'cogs.markov'
+    'cogs.markov',
+    'cogs.reminders'
 ]
 
 class Tweety(commands.Bot):
