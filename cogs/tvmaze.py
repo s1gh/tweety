@@ -22,7 +22,7 @@ class Tvmaze:
 
     @commands.command(aliases=['ep'])
     async def nextepisode(self, ctx, *, show: str):
-        """Fetch information about the next episode of your favorite tv series"""
+        """Fetch information about the next episode of a given tv series"""
         async with self.bot.session.get(api_url.format(show)) as r:
             if r.status == 200:
                 ep = Episode(await r.json())
