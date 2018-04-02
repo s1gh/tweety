@@ -17,11 +17,11 @@ class Markov(Database):
         async with ctx.typing():
             try:
                 if user is None:
-                    query = 'SELECT message FROM chatlog'
+                    query = 'SELECT message FROM chatlog WHERE server_id = $1'
                 else:
                     query = 'SELECT message FROM chatlog WHERE member_id = $1'
 
-                txt = await self.query(query, [] if user is None else [user.id])
+                txt = await self.query(query, [ctx.guild.id] if user is None else [user.id])
                 model = markovify.NewlineText('\n'.join(x['message'] for x in txt), state_size=3 if user is None else 2)
                 sentence = model.make_sentence(tries=300 if user is None else 600)
             except Exception as err:
