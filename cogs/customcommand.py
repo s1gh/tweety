@@ -40,9 +40,9 @@ class CustomCommand(Database):
             log.error(err)
         else:
             if ctx.guild.id in self.cc_map.keys():
-                self.cc_map[ctx.guild.id][trigger_word] = trigger_text
+                self.cc_map[ctx.guild.id][trigger_word.lower()] = trigger_text
             else:
-                self.cc_map[ctx.guild.id] = {trigger_word: trigger_text}
+                self.cc_map[ctx.guild.id] = {trigger_word.lower(): trigger_text}
             await ctx.send('```[INFO] {}```'.format('Custom command successfully created.'))
 
     @checks.is_admin()
