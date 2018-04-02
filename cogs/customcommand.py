@@ -116,7 +116,7 @@ class CustomCommand(Database):
         if message.author.bot:
             return
         try:
-            reply = self.cc_map[message.guild.id][message.content]
+            reply = self.cc_map[message.guild.id][message.content.lower()]
         except KeyError:
             pass
         except Exception as err:
