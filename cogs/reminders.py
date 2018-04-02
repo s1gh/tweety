@@ -51,6 +51,7 @@ class Reminders(Database):
     @commands.command(aliases=['reminder'])
     async def remindme(self, ctx, time: int, unit: str, *, reminder: str):
         """A way for members to create their own reminders.
+        Valid units: seconds, minutes, hours, days, weeks
         Example: remindme 15 minutes Take the pizza out of the oven."""
         try:
             if time < 0:
