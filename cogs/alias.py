@@ -41,6 +41,7 @@ class Alias:
 
                 with open('{}/data/{}'.format(self.bot.base, 'alias_map.json'), 'w') as f:
                     json.dump(self.alias_map, f)
+                    await ctx.send('```[INFO] Alias "{}" created successfully.```'.format(alias_name))
             except IOError:
                 log.error('Could not write to alias_map.json.')
         else:
