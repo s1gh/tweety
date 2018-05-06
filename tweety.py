@@ -8,6 +8,7 @@ import traceback
 import datetime
 import os
 from discord.ext import commands
+from pathlib import Path
 
 plugins = [
     'cogs.admin',
@@ -37,7 +38,12 @@ class Tweety(commands.Bot):
 
     async def on_ready(self):
         if not hasattr(self, 'uptime'):
-            self.uptime = datetime.datetime.utcnow()
+            if Path('uptime.up').is_file():  # Check if the bot has restarted because of an update (keep uptime)
+                with open('uptime.up', 'r') as f:
+                    self.uptime = datetime.datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S.%f')
+                os.remove('uptime.up')
+            else:
+                self.uptime = datetime.datetime.utcnow()
         if not hasattr(self, 'base'):
             self.base = os.path.dirname(os.path.abspath(__file__))
 
