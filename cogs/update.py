@@ -22,6 +22,7 @@ class Update:
 
             if process.returncode == 0 and 'Already up-to-date.' not in stdoutput.decode('utf-8').strip():
                 log.info('Updated to the latest version.')
+                await self.write_uptime_to_disk()
                 os.execv(sys.executable, ['python'] + sys.argv)
             elif process.returncode != 0:
                 log.critical('Update process failed. Your install seem to be broken. '
@@ -41,6 +42,10 @@ class Update:
         log.warning('Auto update is now set to {}'.format(up))
 
         await ctx.send('```[INFO] Auto update is now set to {}```'.format(up))
+
+    async def write_uptime_to_disk(self):
+        with open('uptime.up', 'w') as f:
+            f.write(str(self.bot.uptime))
 
     async def updater_service(self):
         await self.bot.wait_until_ready()
