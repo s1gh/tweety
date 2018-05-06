@@ -74,7 +74,6 @@ class Info(Database):
     @info.command()
     async def uptime(self, ctx):
         """Get the current uptime"""
-
         await ctx.send('```python\n{}```'.format(Uptime(self.bot.uptime).uptime()))
 
     @info.command()
