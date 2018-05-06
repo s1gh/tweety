@@ -9,3 +9,5 @@ PostgreSQL
 To install PostgreSQL do the following
 
     $ sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
+
+### Windows
