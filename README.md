@@ -1,5 +1,5 @@
 # Tweety v3.0 Discord Bot
-Repository for the complete rewrite of Tweety.
+Repository for the complete rewrite of Tweety
 
 ## Requirements
 PostgreSQL
