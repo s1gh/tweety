@@ -69,3 +69,6 @@ config.py
 
 # SQL files
 *.sql
+
+# Timestamp file
+*.up

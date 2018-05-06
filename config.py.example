@@ -26,3 +26,4 @@ streams_channel = ''
 
 twitch_client_id = ''
 
+tenor_api_key = ''
