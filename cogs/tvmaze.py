@@ -26,7 +26,6 @@ class Tvmaze:
         async with self.bot.session.get(api_url.format(show)) as r:
             if r.status == 200:
                 ep = Episode(await r.json())
-
                 if ep.running == 0:
                     await ctx.send('``[INFO] Show has ended or been cancelled.``')
                 elif ep.running == 1:
@@ -66,7 +65,8 @@ class Episode:
             self._network = episode['network']['name']
         except KeyError:
             self._network = 'N/A'
-
+        except Exception:
+            self._network = 'N/A'
         if self._running:
             try:
                 self._episode = '{:02d}'.format(int(episode['_embedded']['nextepisode']['number']))
