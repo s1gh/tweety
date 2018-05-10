@@ -99,8 +99,8 @@ class Stats(Database):
 
     async def on_member_update(self, before, after):
         try:
-            if after.game is not None and after.id not in self.tracking_map:
-                self.tracking_map[after.id] = {'status': str(after.game), 'time_started': int(time.time()),
+            if after.activity is not None and after.id not in self.tracking_map:
+                self.tracking_map[after.id] = {'status': str(after.activity), 'time_started': int(time.time()),
                                                'server_id': before.guild.id}
 
                 params = [
@@ -112,7 +112,7 @@ class Stats(Database):
                                    'VALUES ($1, $2, $3) '
                                    'ON CONFLICT (member_id, server_id) DO '
                                    'UPDATE SET last_played = \'{}\''.format(datetime.now()), params)
-            elif after.game is None:
+            elif after.activity is None:
                 play_time = int(time.time()) - self.tracking_map[before.id]['time_started']
 
                 params = [
