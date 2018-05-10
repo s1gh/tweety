@@ -20,7 +20,7 @@ class Update:
             process = subprocess.Popen(['git', 'pull', '--ff-only'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdoutput, stderroutput = process.communicate()
 
-            if process.returncode == 0 and 'Already up-to-date.' not in stdoutput.decode('utf-8').strip():
+            if process.returncode == 0 and 'Already up to date.' not in stdoutput.decode('utf-8').strip():
                 log.info('Updated to the latest version.')
                 await self.write_uptime_to_disk()
                 os.execv(sys.executable, ['python'] + sys.argv)
