@@ -33,6 +33,12 @@ tiers = {
     'Champion III': '18',
     'Grand Champion': '19'
 }
+divisions = [
+    'I',
+    'II',
+    'III',
+    'IV'	
+]
 playlist = {
     '10': 'Solo',
     '11': 'Doubles',
@@ -87,7 +93,7 @@ class Rocketleague:
                             em.add_field(name=playlist[k], value='**{}**\n----------------\nRating....: {}\nDivision.: {}\nMatches: {}'.format(
                                 [key for key, value in tiers.items() if value == str(v['tier'])][0],
                                 v['rankPoints'],
-                                int(v['division']) + 1,
+                                divisions[int(v['division'])],
                                 v['matchesPlayed']
                             ))
                         await ctx.send(embed=em)
