@@ -27,7 +27,7 @@ class Tvmaze:
             if r.status == 200:
                 ep = Episode(await r.json())
                 if ep.running == 0:
-                    await ctx.send('``[INFO] Show has ended or been cancelled.``')
+                    await ctx.send('```[INFO] Show has ended or been cancelled.```')
                 elif ep.running == 1:
                     em = Embed(url=ep.url, title='S{}E{} - {}'.format(ep.season, ep.episode, ep.name))
                     em.set_author(name=ep.show_name, url=ep.imdb)
