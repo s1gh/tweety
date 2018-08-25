@@ -63,6 +63,7 @@ class Admin(Database):
     async def log(self, ctx, lines: int=5):
         with open('{}/tweety.log'.format(self.bot.base), 'r') as f:
             content = deque(f, lines)
+            content.reverse()  # Reverse the deque object so we can retrieve the latest log entries first
             if len(content) > 0:
                 await ctx.send('```python\n{}```'.format(''.join(content)))
             else:
