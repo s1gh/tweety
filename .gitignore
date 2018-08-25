@@ -72,3 +72,6 @@ config.py
 
 # Timestamp file
 *.up
+
+# Backup files
+# *.bak
