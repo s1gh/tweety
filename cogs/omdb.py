@@ -1,11 +1,11 @@
 import logging
+import re
 from discord.ext import commands
 from utils.misc import Embed
 from config import omdb_api_key as api_key
 
 API_URL = 'http://www.omdbapi.com/?t={}&plot=short&apikey={}&y={}'
-EMBED_ICON = 'http://www.wallofwally.com/wp-content/uploads/google-tv-icon-' \
-             'logo-vector-ai-free-graphics-download-google-tv-logo-vector.png'
+EMBED_ICON = 'https://cdn4.iconfinder.com/data/icons/planner-color/64/popcorn-movie-time-512.png'
 
 log = logging.getLogger(__name__)
 
@@ -14,9 +14,18 @@ class OMDB:
         self.bot = tweety
 
     @commands.command(aliases=['imdb'])
-    async def omdb(self, ctx, title: str, year: str = None):
+    async def omdb(self, ctx, *, query: str):
         """Fetch information about movies/tv series
-        Example: <prefix>omdb \"Movie\" YEAR"""
+        Example: <prefix>omdb Movie (year)"""
+        year = re.findall("(\d{4})", query)
+
+        if len(year) > 0:
+            title = query.rsplit('(')[0].strip()
+            year = year[0]
+        else:
+            year = ""
+            title = query
+
         async with self.bot.session.get(API_URL.format(title, api_key, year)) as r:
             if r.status == 200:
                 resp = await r.json()

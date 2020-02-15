@@ -121,6 +121,7 @@ class CustomCommand(Database):
             pass
         except Exception as err:
             log.error(err)
+            pass
         else:
             await message.channel.send(reply)
 
